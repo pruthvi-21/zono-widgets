@@ -1,0 +1,61 @@
+package com.jw.zonowidgets.utils
+
+import com.jw.zonowidgets.data.model.CityTimeZoneInfo
+
+val CITY_TIME_ZONES = listOf(
+    CityTimeZoneInfo(5572, "New Delhi / India", "Asia/Kolkata"),
+    CityTimeZoneInfo(1935, "New York / USA", "America/New_York"),
+    CityTimeZoneInfo(6241, "London / UK", "Europe/London"),
+    CityTimeZoneInfo(1157, "Paris / France", "Europe/Paris"),
+    CityTimeZoneInfo(5742, "Berlin / Germany", "Europe/Berlin"),
+    CityTimeZoneInfo(3460, "Tokyo / Japan", "Asia/Tokyo"),
+    CityTimeZoneInfo(1348, "Beijing / China", "Asia/Shanghai"),
+    CityTimeZoneInfo(2761, "Moscow / Russia", "Europe/Moscow"),
+    CityTimeZoneInfo(2365, "São Paulo / Brazil", "America/Sao_Paulo"),
+    CityTimeZoneInfo(6352, "Los Angeles / USA", "America/Los_Angeles"),
+    CityTimeZoneInfo(7600, "Cairo / Egypt", "Africa/Cairo"),
+    CityTimeZoneInfo(7086, "Istanbul / Turkey", "Europe/Istanbul"),
+    CityTimeZoneInfo(9781, "Mexico City / Mexico", "America/Mexico_City"),
+    CityTimeZoneInfo(5009, "Jakarta / Indonesia", "Asia/Jakarta"),
+    CityTimeZoneInfo(6714, "Seoul / South Korea", "Asia/Seoul"),
+    CityTimeZoneInfo(9190, "Bangkok / Thailand", "Asia/Bangkok"),
+    CityTimeZoneInfo(2784, "Singapore / Singapore", "Asia/Singapore"),
+    CityTimeZoneInfo(5412, "Hong Kong / China", "Asia/Hong_Kong"),
+    CityTimeZoneInfo(3629, "Madrid / Spain", "Europe/Madrid"),
+    CityTimeZoneInfo(2836, "Rome / Italy", "Europe/Rome"),
+    CityTimeZoneInfo(9957, "Toronto / Canada", "America/Toronto"),
+    CityTimeZoneInfo(3754, "Chicago / USA", "America/Chicago"),
+    CityTimeZoneInfo(6428, "San Francisco / USA", "America/Los_Angeles"),
+    CityTimeZoneInfo(5254, "Buenos Aires / Argentina", "America/Argentina/Buenos_Aires"),
+    CityTimeZoneInfo(5808, "Lagos / Nigeria", "Africa/Lagos"),
+    CityTimeZoneInfo(1786, "Nairobi / Kenya", "Africa/Nairobi"),
+    CityTimeZoneInfo(1580, "Dubai / UAE", "Asia/Dubai"),
+    CityTimeZoneInfo(8132, "Tehran / Iran", "Asia/Tehran"),
+    CityTimeZoneInfo(7812, "Baghdad / Iraq", "Asia/Baghdad"),
+    CityTimeZoneInfo(6600, "Karachi / Pakistan", "Asia/Karachi"),
+    CityTimeZoneInfo(5537, "Dhaka / Bangladesh", "Asia/Dhaka"),
+    CityTimeZoneInfo(6627, "Kuala Lumpur / Malaysia", "Asia/Kuala_Lumpur"),
+    CityTimeZoneInfo(8036, "Manila / Philippines", "Asia/Manila"),
+    CityTimeZoneInfo(4208, "Hanoi / Vietnam", "Asia/Bangkok"),
+    CityTimeZoneInfo(8821, "Cape Town / South Africa", "Africa/Johannesburg"),
+    CityTimeZoneInfo(6378, "Riyadh / Saudi Arabia", "Asia/Riyadh"),
+    CityTimeZoneInfo(4035, "Doha / Qatar", "Asia/Qatar"),
+    CityTimeZoneInfo(8196, "Osaka / Japan", "Asia/Tokyo"),
+    CityTimeZoneInfo(5197, "Melbourne / Australia", "Australia/Melbourne"),
+    CityTimeZoneInfo(5304, "Sydney / Australia", "Australia/Sydney"),
+    CityTimeZoneInfo(6811, "Auckland / New Zealand", "Pacific/Auckland"),
+    CityTimeZoneInfo(9940, "Lima / Peru", "America/Lima"),
+    CityTimeZoneInfo(9554, "Santiago / Chile", "America/Santiago"),
+    CityTimeZoneInfo(6549, "Bogotá / Colombia", "America/Bogota"),
+    CityTimeZoneInfo(1159, "Montreal / Canada", "America/Toronto"),
+    CityTimeZoneInfo(7053, "Vancouver / Canada", "America/Vancouver"),
+    CityTimeZoneInfo(4351, "Brussels / Belgium", "Europe/Brussels"),
+    CityTimeZoneInfo(9459, "Amsterdam / Netherlands", "Europe/Amsterdam"),
+    CityTimeZoneInfo(1795, "Vienna / Austria", "Europe/Vienna"),
+    CityTimeZoneInfo(8693, "Zurich / Switzerland", "Europe/Zurich"),
+    CityTimeZoneInfo(3581, "Stockholm / Sweden", "Europe/Stockholm")
+)
+
+const val PREFERENCES_NAME = "widget_prefs"
+
+const val EXTRA_SELECTED_ZONE_ID = "extra_selected_zone_id"
