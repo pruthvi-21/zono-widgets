@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.jw.zonowidgets.ui.preferences.TimeZonePreference
+        android:key="key_first_city"
+        android:title="@string/first_city"
+        app:iconSpaceReserved="false"
+        tools:summary="New Delhi" />
+
+    <com.jw.zonowidgets.ui.preferences.TimeZonePreference
+        android:key="key_second_city"
+        android:title="@string/second_city"
+        app:iconSpaceReserved="false"
+        tools:summary="Tokyo" />
+
+    <PreferenceCategory
+        android:title="@string/background"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreference
+            android:key="key_day_night_switch"
+            android:persistent="false"
+            android:summary="Background color will change depending on the time of the day."
+            android:title="@string/day_and_night_colors"
+            android:widgetLayout="@layout/m3_switch"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

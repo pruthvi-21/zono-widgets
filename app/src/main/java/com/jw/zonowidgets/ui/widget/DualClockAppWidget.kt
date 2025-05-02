@@ -27,8 +27,8 @@ class DualClockAppWidget : AppWidgetProvider() {
             val views = RemoteViews(context.packageName, R.layout.widget_dual_clock)
             views.removeAllViews(R.id.root)
 
-            val view1 = buildRemoteView(context, "${widgetId}_item1")
-            val view2 = buildRemoteView(context, "${widgetId}_item2")
+            val view1 = buildRemoteView(context, widgetId, "${widgetId}_item1")
+            val view2 = buildRemoteView(context, widgetId, "${widgetId}_item2")
 
             views.addView(R.id.root, view1)
             views.addView(R.id.root, view2)
@@ -49,7 +49,7 @@ class DualClockAppWidget : AppWidgetProvider() {
             AppWidgetManager.getInstance(context).updateAppWidget(widgetId, views)
         }
 
-        private fun buildRemoteView(context: Context, key: String): RemoteViews {
+        private fun buildRemoteView(context: Context, widgetId: Int, key: String): RemoteViews {
             val prefs = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
 
             val id = prefs.getInt(key, -1)
@@ -61,27 +61,34 @@ class DualClockAppWidget : AppWidgetProvider() {
                     setTextViewText(R.id.place, place)
 
                     val tz = ZoneId.of(cityTimeZone.timeZoneId)
-                    val now = ZonedDateTime.now(tz)
-                    val hour = now.hour
-                    val isDayTime = hour in 6..17
 
                     setString(R.id.date, "setTimeZone", tz.id)
                     setString(R.id.time, "setTimeZone", tz.id)
                     setString(R.id.amPmText, "setTimeZone", tz.id)
 
-                    val color = if (isDayTime) "#FF9C00".toColorInt() else "#C1C0FD".toColorInt()
-                    setTextColor(R.id.place, color)
-                    setTextColor(R.id.date, color)
-                    setTextColor(R.id.time, color)
-                    setTextColor(R.id.amPmText, color)
+                    val isDayNightEnabled = prefs.getBoolean("${widgetId}_day_night_switch", true)
 
-                    val backgroundRes =
-                        if (isDayTime) R.drawable.bg_widget_clock_day
-                        else R.drawable.bg_widget_clock_night
-                    setInt(R.id.root, "setBackgroundResource", backgroundRes)
+                    if (isDayNightEnabled) {
+                        val now = ZonedDateTime.now(tz)
+                        val hour = now.hour
+                        val isDayTime = hour in 6..17
 
-                    val iconRes = if (isDayTime) R.drawable.ic_sun_24dp else R.drawable.ic_moon_24dp
-                    setImageViewResource(R.id.icon, iconRes)
+                        val color =
+                            if (isDayTime) "#FF9C00".toColorInt() else "#C1C0FD".toColorInt()
+                        setTextColor(R.id.place, color)
+                        setTextColor(R.id.date, color)
+                        setTextColor(R.id.time, color)
+                        setTextColor(R.id.amPmText, color)
+
+                        val backgroundRes =
+                            if (isDayTime) R.drawable.bg_widget_clock_day
+                            else R.drawable.bg_widget_clock_night
+                        setInt(R.id.root, "setBackgroundResource", backgroundRes)
+
+                        val iconRes =
+                            if (isDayTime) R.drawable.ic_sun_24dp else R.drawable.ic_moon_24dp
+                        setImageViewResource(R.id.icon, iconRes)
+                    }
                 }
             }
         }
