@@ -38,8 +38,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="4dp"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_moon_24dp" />
+            android:contentDescription="@null" />
     </RelativeLayout>
 
     <TextClock

@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.fastscroll)
+    implementation(libs.androidx.preference.ktx)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

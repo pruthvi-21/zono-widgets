@@ -12,45 +12,22 @@
         android:layout_height="?actionBarSize"
         android:keyboardNavigationCluster="false"
         app:title="@string/clock_settings"
+        android:layout_marginTop="@dimen/toolbar_top_margin"
         app:titleTextColor="?colorPrimary" />
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingVertical="16dp">
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
-        <com.jw.zonowidgets.ui.views.ClockSettingItemView
-            android:id="@+id/timezone1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?selectableItemBackground"
-            android:text="@string/first_city" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height=".5dp"
-            android:background="?colorOutlineVariant" />
-
-        <com.jw.zonowidgets.ui.views.ClockSettingItemView
-            android:id="@+id/timezone2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?selectableItemBackground"
-            android:text="@string/second_city" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/save_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="24dp"
-            android:paddingVertical="15dp"
-            android:text="@string/done" />
-    </LinearLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/save_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="16dp"
+        android:layout_marginTop="24dp"
+        android:paddingVertical="15dp"
+        android:text="@string/done" />
 </LinearLayout>
