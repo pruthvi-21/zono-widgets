@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Zono Widgets"
+rootProject.name = "zono-widgets"
 include(":app")

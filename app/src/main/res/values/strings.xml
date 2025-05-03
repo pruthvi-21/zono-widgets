@@ -1,13 +1,15 @@
 <resources>
     <string name="app_name">Zono Widgets</string>
+    <string name="clock_settings">Clock settings</string>
     <string name="first_city">First city</string>
     <string name="second_city">Second city</string>
+    <string name="background">Background</string>
+    <string name="day_night_switch_title">Day and night colors</string>
+    <string name="day_night_switch_description">Background color will change depending on the time of the day.</string>
     <string name="done">Done</string>
-    <string name="clock_settings">Clock settings</string>
     <string name="unable_to_open_settings">Unable to open settings</string>
+    <string name="select_your_city">Select your city</string>
+    <string name="navigate_up">Navigate up</string>
 
     <string name="gmt" translatable="false">GMT%1$s</string>
-    <string name="select_your_city">Select your city</string>
-    <string name="day_and_night_colors">Day and night colors</string>
-    <string name="background">Background</string>
 </resources>
