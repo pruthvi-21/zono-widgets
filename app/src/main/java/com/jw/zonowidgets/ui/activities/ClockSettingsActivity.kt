@@ -10,15 +10,18 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -34,15 +37,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
 import com.jw.zonowidgets.R
 import com.jw.zonowidgets.data.model.CityTimeZoneInfo
 import com.jw.zonowidgets.ui.theme.ZonoWidgetsTheme
+import com.jw.zonowidgets.ui.theme.defaultShape
 import com.jw.zonowidgets.ui.widget.DualClockAppWidget
 import com.jw.zonowidgets.utils.CITY_TIME_ZONES
 import com.jw.zonowidgets.utils.EXTRA_SELECTED_ZONE_ID
@@ -117,31 +123,39 @@ class ClockSettingsActivity : ComponentActivity() {
             }
 
         Column(modifier = modifier.fillMaxSize()) {
-            TimeZoneSettingTile(
-                title = stringResource(R.string.first_city),
-                timeZoneInfo = selectedTz1,
-                onClick = {
-                    timezoneBeingEdited = 1
-                    launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
-                }
-            )
-            TimeZoneSettingTile(
-                title = stringResource(R.string.second_city),
-                timeZoneInfo = selectedTz2,
-                onClick = {
-                    timezoneBeingEdited = 2
-                    launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
-                }
-            )
-
-            HorizontalDivider()
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 12.dp)
+                    .clip(defaultShape)
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
+            ) {
+                TimeZoneSettingTile(
+                    title = stringResource(R.string.first_city),
+                    timeZoneInfo = selectedTz1,
+                    onClick = {
+                        timezoneBeingEdited = 1
+                        launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
+                    }
+                )
+                HorizontalDivider(Modifier.padding(horizontal = 20.dp))
+                TimeZoneSettingTile(
+                    title = stringResource(R.string.second_city),
+                    timeZoneInfo = selectedTz2,
+                    onClick = {
+                        timezoneBeingEdited = 2
+                        launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
+                    }
+                )
+            }
 
             Text(
                 text = stringResource(R.string.background),
                 style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .padding(horizontal = 20.dp, vertical = 5.dp)
-                    .padding(top = 10.dp),
+                    .padding(horizontal = 32.dp, vertical = 5.dp)
+                    .padding(top = 15.dp),
             )
             DayNightSwitch()
 
@@ -151,6 +165,8 @@ class ClockSettingsActivity : ComponentActivity() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp, vertical = 16.dp),
+                contentPadding = PaddingValues(15.dp),
+                shape = defaultShape,
                 onClick = {
                     DualClockAppWidget.updateWidget(this@ClockSettingsActivity, widgetId)
                     setResult(RESULT_OK, Intent().putExtra(EXTRA_APPWIDGET_ID, widgetId))
@@ -173,12 +189,12 @@ class ClockSettingsActivity : ComponentActivity() {
                 .fillMaxWidth()
                 .heightIn(min = 64.dp)
                 .clickable { onClick() }
-                .padding(vertical = 16.dp, horizontal = 20.dp)
+                .padding(vertical = 14.dp, horizontal = 20.dp)
         ) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyLarge,
-                fontSize = 18.sp,
+                fontSize = 16.sp,
             )
             Text(
                 text = timeZoneInfo.city,
@@ -198,6 +214,9 @@ class ClockSettingsActivity : ComponentActivity() {
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(min = 64.dp)
+                .padding(horizontal = 12.dp)
+                .clip(defaultShape)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .clickable {
                     isChecked = !isChecked
                     prefs.edit {
@@ -205,7 +224,7 @@ class ClockSettingsActivity : ComponentActivity() {
                     }
                     DualClockAppWidget.updateWidget(this@ClockSettingsActivity, widgetId)
                 }
-                .padding(vertical = 16.dp, horizontal = 20.dp),
+                .padding(vertical = 14.dp, horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -222,6 +241,7 @@ class ClockSettingsActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+            Spacer(Modifier.width(10.dp))
 
             Switch(
                 checked = isChecked,
