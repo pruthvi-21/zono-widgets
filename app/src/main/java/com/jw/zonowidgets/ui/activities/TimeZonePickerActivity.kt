@@ -5,13 +5,17 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -23,15 +27,18 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.jw.zonowidgets.R
 import com.jw.zonowidgets.data.model.CityTimeZoneInfo
 import com.jw.zonowidgets.ui.theme.ZonoWidgetsTheme
+import com.jw.zonowidgets.ui.theme.defaultShape
 import com.jw.zonowidgets.utils.CITY_TIME_ZONES
 import com.jw.zonowidgets.utils.EXTRA_SELECTED_ZONE_ID
 import java.time.ZoneId
@@ -81,13 +88,12 @@ class TimeZonePickerActivity : ComponentActivity() {
                 .sortedBy { it.city }
                 .groupBy { it.city.first() }
         }
+        val cardShape = defaultShape
 
-        LazyColumn(modifier = modifier) {
+        LazyColumn(modifier = modifier.padding(horizontal = 12.dp)) {
+
             grouped.entries.forEachIndexed { index, (initial, zones) ->
                 item {
-                    if (index != 0) {
-                        HorizontalDivider()
-                    }
                     Text(
                         text = initial.toString(),
                         style = MaterialTheme.typography.titleMedium,
@@ -98,22 +104,53 @@ class TimeZonePickerActivity : ComponentActivity() {
                             .padding(top = 3.dp)
                     )
                 }
-                items(zones) { zone ->
-                    ListItem(zone)
+                itemsIndexed(zones) { idx, zone ->
+                    val shape = when {
+                        zones.size == 1 -> cardShape
+                        idx == 0 -> cardShape.copy(
+                            bottomStart = CornerSize(0.dp),
+                            bottomEnd = CornerSize(0.dp),
+                        )
+
+                        idx == zones.lastIndex -> cardShape.copy(
+                            topStart = CornerSize(0.dp),
+                            topEnd = CornerSize(0.dp),
+                        )
+
+                        else -> RectangleShape
+                    }
+                    ListItem(
+                        timeZoneInfo = zone,
+                        modifier = Modifier
+                            .clip(shape)
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                    )
+                    if (idx < zones.lastIndex) {
+                        HorizontalDivider(
+                            thickness = 1.dp,
+                            color = MaterialTheme.colorScheme.outlineVariant,
+                            modifier = Modifier
+                                .background(MaterialTheme.colorScheme.surfaceVariant)
+                                .padding(start = 20.dp, end = 20.dp)
+                        )
+                    }
                 }
+            }
+            item {
+                Spacer(Modifier.height(30.dp))
             }
         }
     }
 
     @Composable
-    private fun ListItem(timeZoneInfo: CityTimeZoneInfo) {
+    private fun ListItem(timeZoneInfo: CityTimeZoneInfo, modifier: Modifier) {
         val offset = getString(
             R.string.gmt,
             ZonedDateTime.now(ZoneId.of(timeZoneInfo.timeZoneId)).offset.toString()
         )
 
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .heightIn(min = 64.dp)
                 .fillMaxWidth()
                 .clickable {
@@ -123,14 +160,14 @@ class TimeZonePickerActivity : ComponentActivity() {
                 .padding(horizontal = 20.dp, vertical = 10.dp)
         ) {
             Text(
-                text = timeZoneInfo.city
+                text = timeZoneInfo.city,
+                fontSize = 16.sp,
             )
             Text(
                 text = offset,
-                color = Color(0xFF999999)
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 13.sp
             )
         }
     }
-
 }
-
