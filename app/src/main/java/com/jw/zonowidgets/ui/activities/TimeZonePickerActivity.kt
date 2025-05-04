@@ -41,8 +41,7 @@ import com.jw.zonowidgets.ui.theme.ZonoWidgetsTheme
 import com.jw.zonowidgets.ui.theme.defaultShape
 import com.jw.zonowidgets.utils.EXTRA_SELECTED_ZONE_ID
 import com.jw.zonowidgets.utils.World
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import com.jw.zonowidgets.utils.readableOffset
 
 class TimeZonePickerActivity : ComponentActivity() {
 
@@ -144,10 +143,7 @@ class TimeZonePickerActivity : ComponentActivity() {
 
     @Composable
     private fun ListItem(timeZoneInfo: CityTimeZoneInfo, modifier: Modifier) {
-        val offset = getString(
-            R.string.gmt,
-            ZonedDateTime.now(ZoneId.of(timeZoneInfo.timeZoneId)).offset.toString()
-        )
+        val offset = timeZoneInfo.readableOffset()
 
         Column(
             modifier = modifier
@@ -164,7 +160,7 @@ class TimeZonePickerActivity : ComponentActivity() {
                 fontSize = 16.sp,
             )
             Text(
-                text = offset,
+                text = stringResource(R.string.gmt, offset),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 13.sp
             )
