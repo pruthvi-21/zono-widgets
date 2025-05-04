@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 
-val defaultShape = RoundedCornerShape(22.dp)
+val defaultShape = RoundedCornerShape(8.dp)
 
 @Composable
 fun ZonoWidgetsTheme(
