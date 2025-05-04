@@ -25,6 +25,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -40,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -83,6 +86,15 @@ class ClockSettingsActivity : ComponentActivity() {
                                     color = MaterialTheme.colorScheme.primary
                                 )
                             },
+                            navigationIcon = {
+                                IconButton(onClick = { finish() }) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_chevron_left),
+                                        contentDescription = stringResource(R.string.navigate_up),
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                            },
                             modifier = Modifier.padding(top = dimensionResource(R.dimen.toolbar_top_margin))
                         )
                     }
@@ -116,10 +128,8 @@ class ClockSettingsActivity : ComponentActivity() {
                         ?: return@rememberLauncherForActivityResult
 
                 if (timezoneBeingEdited == 1) {
-                    prefs.setCityIdAt(widgetId, 1, id)
                     firstTimeZoneInfo = selected
                 } else {
-                    prefs.setCityIdAt(widgetId, 2, id)
                     secondTimeZoneInfo = selected
                 }
 
@@ -155,11 +165,7 @@ class ClockSettingsActivity : ComponentActivity() {
             SwitchSetting(
                 title = stringResource(R.string.format_24_hour_switch_title),
                 checked = is24HourFormatEnabled,
-                onClick = {
-                    is24HourFormatEnabled = it
-                    prefs.setUse24HourFormat(widgetId, it)
-                    DualClockAppWidget.updateWidget(this@ClockSettingsActivity, widgetId)
-                },
+                onClick = { is24HourFormatEnabled = it },
                 modifier = Modifier.padding(top = 20.dp)
             )
 
@@ -176,11 +182,7 @@ class ClockSettingsActivity : ComponentActivity() {
                 title = stringResource(R.string.day_night_switch_title),
                 summary = stringResource(R.string.day_night_switch_description),
                 checked = isDayNightModeEnabled,
-                onClick = {
-                    isDayNightModeEnabled = it
-                    prefs.setDayNightSwitch(widgetId, it)
-                    DualClockAppWidget.updateWidget(this@ClockSettingsActivity, widgetId)
-                },
+                onClick = { isDayNightModeEnabled = it },
             )
 
             Spacer(Modifier.weight(1f))
@@ -192,12 +194,17 @@ class ClockSettingsActivity : ComponentActivity() {
                 contentPadding = PaddingValues(15.dp),
                 shape = defaultShape,
                 onClick = {
+                    prefs.setCityIdAt(widgetId, 1, firstTimeZoneInfo.id)
+                    prefs.setCityIdAt(widgetId, 2, secondTimeZoneInfo.id)
+                    prefs.setUse24HourFormat(widgetId, is24HourFormatEnabled)
+                    prefs.setDayNightSwitch(widgetId, isDayNightModeEnabled)
+
                     DualClockAppWidget.updateWidget(this@ClockSettingsActivity, widgetId)
                     setResult(RESULT_OK, Intent().putExtra(EXTRA_APPWIDGET_ID, widgetId))
                     finish()
                 }
             ) {
-                Text(text = stringResource(R.string.done))
+                Text(text = stringResource(R.string.save))
             }
         }
     }
