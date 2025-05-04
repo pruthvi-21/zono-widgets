@@ -2,8 +2,6 @@ package com.jw.zonowidgets.utils
 
 import com.jw.zonowidgets.data.model.CityTimeZoneInfo
 
-const val PREFERENCES_NAME = "widget_prefs"
-
 const val EXTRA_SELECTED_ZONE_ID = "extra_selected_zone_id"
 
 object World {
