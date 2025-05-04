@@ -9,8 +9,8 @@ import android.widget.RemoteViews
 import androidx.core.graphics.toColorInt
 import com.jw.zonowidgets.R
 import com.jw.zonowidgets.ui.activities.ClockSettingsActivity
-import com.jw.zonowidgets.utils.CITY_TIME_ZONES
 import com.jw.zonowidgets.utils.PREFERENCES_NAME
+import com.jw.zonowidgets.utils.World
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
@@ -52,8 +52,8 @@ class DualClockAppWidget : AppWidgetProvider() {
         private fun buildRemoteView(context: Context, widgetId: Int, key: String): RemoteViews {
             val prefs = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
 
-            val id = prefs.getInt(key, -1)
-            val cityTimeZone = CITY_TIME_ZONES.firstOrNull { it.id == id }
+            val id = prefs.getString(key, null)
+            val cityTimeZone = World.cities.firstOrNull { it.id == id }
 
             return RemoteViews(context.packageName, R.layout.widget_clock).apply {
                 if (cityTimeZone != null) {

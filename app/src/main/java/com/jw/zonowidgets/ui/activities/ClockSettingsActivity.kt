@@ -50,9 +50,9 @@ import com.jw.zonowidgets.data.model.CityTimeZoneInfo
 import com.jw.zonowidgets.ui.theme.ZonoWidgetsTheme
 import com.jw.zonowidgets.ui.theme.defaultShape
 import com.jw.zonowidgets.ui.widget.DualClockAppWidget
-import com.jw.zonowidgets.utils.CITY_TIME_ZONES
 import com.jw.zonowidgets.utils.EXTRA_SELECTED_ZONE_ID
 import com.jw.zonowidgets.utils.PREFERENCES_NAME
+import com.jw.zonowidgets.utils.World
 
 class ClockSettingsActivity : ComponentActivity() {
 
@@ -107,15 +107,16 @@ class ClockSettingsActivity : ComponentActivity() {
             rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode != RESULT_OK || result.data == null) return@rememberLauncherForActivityResult
 
-                val id = result.data!!.getIntExtra(EXTRA_SELECTED_ZONE_ID, -1)
+                val id = result.data!!.getStringExtra(EXTRA_SELECTED_ZONE_ID)
                 val selected =
-                    CITY_TIME_ZONES.find { it.id == id } ?: return@rememberLauncherForActivityResult
+                    World.cities.find { it.id == id }
+                        ?: return@rememberLauncherForActivityResult
 
                 if (timezoneBeingEdited == 1) {
-                    prefs.edit { putInt("${widgetId}_item1", selected.id) }
+                    prefs.edit { putString("${widgetId}_item1", selected.id) }
                     selectedTz1 = selected
                 } else {
-                    prefs.edit { putInt("${widgetId}_item2", selected.id) }
+                    prefs.edit { putString("${widgetId}_item2", selected.id) }
                     selectedTz2 = selected
                 }
 
@@ -251,9 +252,9 @@ class ClockSettingsActivity : ComponentActivity() {
     }
 
     private fun loadOrDefaultTimeZone(key: String): CityTimeZoneInfo {
-        val savedId = prefs.getInt(key, -1)
-        return CITY_TIME_ZONES.find { it.id == savedId } ?: CITY_TIME_ZONES.first().also {
-            prefs.edit { putInt(key, it.id) }
+        val savedId = prefs.getString(key, null)
+        return World.cities.find { it.id == savedId } ?: World.cities.first().also {
+            prefs.edit { putString(key, it.id) }
         }
     }
 }

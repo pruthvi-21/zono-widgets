@@ -39,8 +39,8 @@ import com.jw.zonowidgets.R
 import com.jw.zonowidgets.data.model.CityTimeZoneInfo
 import com.jw.zonowidgets.ui.theme.ZonoWidgetsTheme
 import com.jw.zonowidgets.ui.theme.defaultShape
-import com.jw.zonowidgets.utils.CITY_TIME_ZONES
 import com.jw.zonowidgets.utils.EXTRA_SELECTED_ZONE_ID
+import com.jw.zonowidgets.utils.World
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
@@ -84,7 +84,7 @@ class TimeZonePickerActivity : ComponentActivity() {
     @Composable
     private fun MyContent(modifier: Modifier) {
         val grouped = remember {
-            CITY_TIME_ZONES
+            World.cities
                 .sortedBy { it.city }
                 .groupBy { it.city.first() }
         }
