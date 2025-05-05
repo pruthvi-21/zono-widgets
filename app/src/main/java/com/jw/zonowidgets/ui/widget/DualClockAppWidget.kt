@@ -11,20 +11,26 @@ import androidx.core.graphics.toColorInt
 import com.jw.zonowidgets.R
 import com.jw.zonowidgets.ui.activities.ClockSettingsActivity
 import com.jw.zonowidgets.utils.WidgetPrefs
+import com.jw.zonowidgets.utils.WidgetUpdateScheduler
 import com.jw.zonowidgets.utils.World
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
 class DualClockAppWidget : AppWidgetProvider() {
 
+    override fun onEnabled(context: Context) {
+        super.onEnabled(context)
+        WidgetUpdateScheduler.scheduleNext(context)
+    }
+
     override fun onUpdate(context: Context, manager: AppWidgetManager, widgetIds: IntArray) {
         super.onUpdate(context, manager, widgetIds)
-        widgetIds.forEach { updateWidget(context, it) }
+        widgetIds.forEach { refreshWidget(context, it) }
     }
 
     companion object {
 
-        fun updateWidget(context: Context, widgetId: Int) {
+        fun refreshWidget(context: Context, widgetId: Int) {
             val views = RemoteViews(context.packageName, R.layout.widget_dual_clock)
             views.removeAllViews(R.id.root)
 

@@ -127,7 +127,7 @@ class ClockSettingsActivity : ComponentActivity() {
                     viewModel.updateSecondTimeZone(selected)
                 }
 
-                DualClockAppWidget.updateWidget(context, widgetId)
+                DualClockAppWidget.refreshWidget(context, widgetId)
             }
 
         Column(modifier = modifier.fillMaxSize()) {
@@ -217,7 +217,7 @@ class ClockSettingsActivity : ComponentActivity() {
                 onClick = {
                     viewModel.saveSettings()
 
-                    DualClockAppWidget.updateWidget(this@ClockSettingsActivity, widgetId)
+                    DualClockAppWidget.refreshWidget(this@ClockSettingsActivity, widgetId)
                     setResult(RESULT_OK, Intent().putExtra(EXTRA_APPWIDGET_ID, widgetId))
                     finish()
                 }
