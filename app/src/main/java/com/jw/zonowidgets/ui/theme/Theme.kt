@@ -2,13 +2,17 @@ package com.jw.zonowidgets.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 val defaultShape = RoundedCornerShape(8.dp)
 
@@ -43,3 +47,16 @@ fun ZonoWidgetsTheme(
     )
 }
 
+val Typography.preferenceTitleStyle: TextStyle
+    get() = bodyLarge.copy(
+        fontSize = 17.sp,
+    )
+
+val Typography.preferenceSummaryStyle: TextStyle
+    get() = bodyMedium
+
+val Typography.preferenceCategoryStyle: TextStyle
+    get() = bodyMedium
+
+val ColorScheme.preferenceSummaryColor: Color
+    get() = onSurfaceVariant
