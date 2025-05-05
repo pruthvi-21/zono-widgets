@@ -6,14 +6,17 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -21,16 +24,24 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.jw.zonowidgets.R
 import com.jw.zonowidgets.ui.components.SubHeading
 import com.jw.zonowidgets.ui.components.TileSetting
@@ -48,15 +59,43 @@ class TimeZonePickerActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
+            var query by rememberSaveable { mutableStateOf("") }
+
             ZonoWidgetsTheme {
                 Scaffold(
                     contentWindowInsets = WindowInsets.safeDrawing,
                     topBar = {
                         TopAppBar(
                             title = {
-                                Text(
-                                    text = stringResource(R.string.select_your_city),
-                                    color = MaterialTheme.colorScheme.primary
+                                BasicTextField(
+                                    value = query,
+                                    onValueChange = { query = it },
+                                    singleLine = true,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(Color.Transparent)
+                                        .padding(horizontal = 5.dp),
+                                    cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+                                    textStyle = MaterialTheme.typography.bodyLarge.copy(
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                        fontSize = 20.sp
+                                    ),
+                                    decorationBox = { innerTextField ->
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(horizontal = 0.dp, vertical = 12.dp)
+                                        ) {
+                                            if (query.isEmpty()) {
+                                                Text(
+                                                    text = stringResource(R.string.search_cities),
+                                                    color = TextFieldDefaults.colors().unfocusedPlaceholderColor,
+                                                    fontSize = 20.sp
+                                                )
+                                            }
+                                            innerTextField()
+                                        }
+                                    }
                                 )
                             },
                             navigationIcon = {
@@ -69,20 +108,26 @@ class TimeZonePickerActivity : ComponentActivity() {
                                 }
                             },
                             modifier = Modifier.padding(top = dimensionResource(R.dimen.toolbar_top_margin)),
-                            windowInsets = WindowInsets.safeDrawing,
                         )
                     }
                 ) { innerPadding ->
-                    MyContent(modifier = Modifier.padding(innerPadding))
+                    MyContent(
+                        modifier = Modifier.padding(innerPadding),
+                        query = query
+                    )
                 }
             }
         }
     }
 
     @Composable
-    private fun MyContent(modifier: Modifier) {
-        val grouped = remember {
+    private fun MyContent(modifier: Modifier, query: String) {
+        val grouped = remember(query) {
             World.cities
+                .filter {
+                    it.city.contains(query, ignoreCase = true) or
+                            it.timeZoneId.contains(query, ignoreCase = true)
+                }
                 .sortedBy { it.city }
                 .groupBy { it.city.first() }
         }
