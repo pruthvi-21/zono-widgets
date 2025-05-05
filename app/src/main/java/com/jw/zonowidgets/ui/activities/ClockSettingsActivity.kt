@@ -10,6 +10,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,11 +40,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,6 +55,8 @@ import com.jw.zonowidgets.R
 import com.jw.zonowidgets.data.model.CityTimeZoneInfo
 import com.jw.zonowidgets.ui.theme.ZonoWidgetsTheme
 import com.jw.zonowidgets.ui.theme.defaultShape
+import com.jw.zonowidgets.ui.viewmodel.ClockSettingsViewModel
+import com.jw.zonowidgets.ui.viewmodel.ClockSettingsViewModelFactory
 import com.jw.zonowidgets.ui.widget.DualClockAppWidget
 import com.jw.zonowidgets.utils.EXTRA_SELECTED_ZONE_ID
 import com.jw.zonowidgets.utils.WidgetPrefs
@@ -120,17 +118,9 @@ class ClockSettingsActivity : ComponentActivity() {
     private fun MyContent(modifier: Modifier) {
         val context = LocalContext.current
 
-        var firstTimeZoneInfo by remember { mutableStateOf(loadOrDefaultTimeZone(widgetId, 1)) }
-        var secondTimeZoneInfo by remember { mutableStateOf(loadOrDefaultTimeZone(widgetId, 2)) }
-
-        var isDayNightModeEnabled by remember { mutableStateOf(prefs.getDayNightSwitch(widgetId)) }
-        var is24HourFormatEnabled by remember { mutableStateOf(prefs.getUse24HourFormat(widgetId)) }
-
-        var backgroundOpacityValue by remember {
-            mutableFloatStateOf(prefs.getBackgroundOpacity(widgetId))
+        val viewModel by viewModels<ClockSettingsViewModel> {
+            ClockSettingsViewModelFactory(widgetId, prefs)
         }
-
-        var timezoneBeingEdited by remember { mutableStateOf(1) }
 
         val launcher =
             rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -138,14 +128,13 @@ class ClockSettingsActivity : ComponentActivity() {
 
                 val id = result.data!!.getStringExtra(EXTRA_SELECTED_ZONE_ID)
                     ?: return@rememberLauncherForActivityResult
-                val selected =
-                    World.cities.find { it.id == id }
+                val selected = World.cities.find { it.id == id }
                         ?: return@rememberLauncherForActivityResult
 
-                if (timezoneBeingEdited == 1) {
-                    firstTimeZoneInfo = selected
+                if (viewModel.timezoneBeingEdited == 1) {
+                    viewModel.updateFirstTimeZone(selected)
                 } else {
-                    secondTimeZoneInfo = selected
+                    viewModel.updateSecondTimeZone(selected)
                 }
 
                 DualClockAppWidget.updateWidget(context, widgetId)
@@ -165,18 +154,18 @@ class ClockSettingsActivity : ComponentActivity() {
                 ) {
                     TimeZoneSettingTile(
                         title = stringResource(R.string.first_city),
-                        timeZoneInfo = firstTimeZoneInfo,
+                        timeZoneInfo = viewModel.firstTimeZoneInfo,
                         onClick = {
-                            timezoneBeingEdited = 1
+                            viewModel.setTimezoneBeingEdited(1)
                             launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
                         }
                     )
                     HorizontalDivider(Modifier.padding(horizontal = 20.dp))
                     TimeZoneSettingTile(
                         title = stringResource(R.string.second_city),
-                        timeZoneInfo = secondTimeZoneInfo,
+                        timeZoneInfo = viewModel.secondTimeZoneInfo,
                         onClick = {
-                            timezoneBeingEdited = 2
+                            viewModel.setTimezoneBeingEdited(2)
                             launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
                         }
                     )
@@ -196,20 +185,20 @@ class ClockSettingsActivity : ComponentActivity() {
                 ) {
                     SwitchSetting(
                         title = stringResource(R.string.format_24_hour_switch_title),
-                        checked = is24HourFormatEnabled,
-                        onClick = { is24HourFormatEnabled = it },
+                        checked = viewModel.is24HourFormatEnabled,
+                        onClick = { viewModel.toggle24HourFormat() },
                     )
                     HorizontalDivider(Modifier.padding(horizontal = 20.dp))
                     SwitchSetting(
                         title = stringResource(R.string.day_night_switch_title),
                         summary = stringResource(R.string.day_night_switch_description),
-                        checked = isDayNightModeEnabled,
-                        onClick = { isDayNightModeEnabled = it },
+                        checked = viewModel.isDayNightModeEnabled,
+                        onClick = { viewModel.toggleDayNight() },
                     )
                     HorizontalDivider(Modifier.padding(horizontal = 20.dp))
                     BackgroundOpacitySlider(
-                        value = backgroundOpacityValue,
-                        onValueChange = { backgroundOpacityValue = it },
+                        value = viewModel.opacityValue,
+                        onValueChange = { viewModel.updateOpacity(it) },
                     )
                 }
             }
@@ -221,11 +210,7 @@ class ClockSettingsActivity : ComponentActivity() {
                 contentPadding = PaddingValues(15.dp),
                 shape = defaultShape,
                 onClick = {
-                    prefs.setCityIdAt(widgetId, 1, firstTimeZoneInfo.id)
-                    prefs.setCityIdAt(widgetId, 2, secondTimeZoneInfo.id)
-                    prefs.setUse24HourFormat(widgetId, is24HourFormatEnabled)
-                    prefs.setDayNightSwitch(widgetId, isDayNightModeEnabled)
-                    prefs.setBackgroundOpacity(widgetId, backgroundOpacityValue)
+                    viewModel.saveSettings()
 
                     DualClockAppWidget.updateWidget(this@ClockSettingsActivity, widgetId)
                     setResult(RESULT_OK, Intent().putExtra(EXTRA_APPWIDGET_ID, widgetId))
@@ -371,13 +356,6 @@ class ClockSettingsActivity : ComponentActivity() {
                 steps = 9,
                 modifier = Modifier.fillMaxWidth()
             )
-        }
-    }
-
-    private fun loadOrDefaultTimeZone(widgetId: Int, position: Int): CityTimeZoneInfo {
-        val savedId = prefs.getCityIdAt(widgetId, position)
-        return World.cities.find { it.id == savedId } ?: WidgetPrefs.DEFAULT_CITY.also {
-            prefs.setCityIdAt(widgetId, position, it.id)
         }
     }
 }
