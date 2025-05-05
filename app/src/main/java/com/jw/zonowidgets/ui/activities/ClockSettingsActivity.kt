@@ -25,6 +25,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -152,61 +154,65 @@ class ClockSettingsActivity : ComponentActivity() {
         Column(modifier = modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier
-                    .padding(horizontal = 12.dp)
-                    .clip(defaultShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
             ) {
-                TimeZoneSettingTile(
-                    title = stringResource(R.string.first_city),
-                    timeZoneInfo = firstTimeZoneInfo,
-                    onClick = {
-                        timezoneBeingEdited = 1
-                        launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
-                    }
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 12.dp)
+                        .clip(defaultShape)
+                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                ) {
+                    TimeZoneSettingTile(
+                        title = stringResource(R.string.first_city),
+                        timeZoneInfo = firstTimeZoneInfo,
+                        onClick = {
+                            timezoneBeingEdited = 1
+                            launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
+                        }
+                    )
+                    HorizontalDivider(Modifier.padding(horizontal = 20.dp))
+                    TimeZoneSettingTile(
+                        title = stringResource(R.string.second_city),
+                        timeZoneInfo = secondTimeZoneInfo,
+                        onClick = {
+                            timezoneBeingEdited = 2
+                            launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
+                        }
+                    )
+                }
+
+                SubHeading(
+                    label = stringResource(R.string.additional_configuration),
+                    icon = painterResource(R.drawable.ic_settings_24dp),
+                    modifier = Modifier.padding(top = 15.dp),
                 )
-                HorizontalDivider(Modifier.padding(horizontal = 20.dp))
-                TimeZoneSettingTile(
-                    title = stringResource(R.string.second_city),
-                    timeZoneInfo = secondTimeZoneInfo,
-                    onClick = {
-                        timezoneBeingEdited = 2
-                        launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
-                    }
-                )
+
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 12.dp)
+                        .clip(defaultShape)
+                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                ) {
+                    SwitchSetting(
+                        title = stringResource(R.string.format_24_hour_switch_title),
+                        checked = is24HourFormatEnabled,
+                        onClick = { is24HourFormatEnabled = it },
+                    )
+                    HorizontalDivider(Modifier.padding(horizontal = 20.dp))
+                    SwitchSetting(
+                        title = stringResource(R.string.day_night_switch_title),
+                        summary = stringResource(R.string.day_night_switch_description),
+                        checked = isDayNightModeEnabled,
+                        onClick = { isDayNightModeEnabled = it },
+                    )
+                    HorizontalDivider(Modifier.padding(horizontal = 20.dp))
+                    BackgroundOpacitySlider(
+                        value = backgroundOpacityValue,
+                        onValueChange = { backgroundOpacityValue = it },
+                    )
+                }
             }
-
-            SubHeading(
-                label = stringResource(R.string.additional_configuration),
-                icon = painterResource(R.drawable.ic_settings_24dp),
-                modifier = Modifier.padding(top = 15.dp),
-            )
-
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 12.dp)
-                    .clip(defaultShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
-            ) {
-                SwitchSetting(
-                    title = stringResource(R.string.format_24_hour_switch_title),
-                    checked = is24HourFormatEnabled,
-                    onClick = { is24HourFormatEnabled = it },
-                )
-                HorizontalDivider(Modifier.padding(horizontal = 20.dp))
-                SwitchSetting(
-                    title = stringResource(R.string.day_night_switch_title),
-                    summary = stringResource(R.string.day_night_switch_description),
-                    checked = isDayNightModeEnabled,
-                    onClick = { isDayNightModeEnabled = it },
-                )
-                HorizontalDivider(Modifier.padding(horizontal = 20.dp))
-                BackgroundOpacitySlider(
-                    value = backgroundOpacityValue,
-                    onValueChange = { backgroundOpacityValue = it },
-                )
-            }
-
-            Spacer(Modifier.weight(1f))
 
             Button(
                 modifier = Modifier
