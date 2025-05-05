@@ -68,6 +68,9 @@ class DualClockAppWidget : AppWidgetProvider() {
 
                 val isDayNightEnabled = prefs.getDayNightSwitch(widgetId)
                 val use24Hour = prefs.getUse24HourFormat(widgetId)
+                val backgroundOpacity = prefs.getBackgroundOpacity(widgetId)
+
+                setFloat(R.id.background, "setAlpha", backgroundOpacity)
 
                 if (isDayNightEnabled) {
                     val now = ZonedDateTime.now(tz)
@@ -83,7 +86,7 @@ class DualClockAppWidget : AppWidgetProvider() {
                     val backgroundRes =
                         if (isDayTime) R.drawable.bg_widget_clock_day
                         else R.drawable.bg_widget_clock_night
-                    setInt(R.id.root, "setBackgroundResource", backgroundRes)
+                    setInt(R.id.background, "setBackgroundResource", backgroundRes)
 
                     val iconRes = if (isDayTime) R.drawable.ic_sun_24dp else R.drawable.ic_moon_24dp
                     setImageViewResource(R.id.icon, iconRes)
