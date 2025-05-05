@@ -9,18 +9,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.jw.zonowidgets.ui.theme.preferenceSummaryColor
-import com.jw.zonowidgets.ui.theme.preferenceSummaryStyle
 import com.jw.zonowidgets.ui.theme.preferenceTitleStyle
 
 @Composable
 fun TileSetting(
     modifier: Modifier = Modifier,
     title: String,
-    summary: String,
-    summaryColor: Color = MaterialTheme.colorScheme.preferenceSummaryColor,
+    summary: (@Composable () -> Unit)? = null,
     onClick: () -> Unit,
 ) {
     Column(
@@ -34,10 +30,6 @@ fun TileSetting(
             text = title,
             style = MaterialTheme.typography.preferenceTitleStyle,
         )
-        Text(
-            text = summary,
-            style = MaterialTheme.typography.preferenceSummaryStyle,
-            color = summaryColor,
-        )
+        summary?.invoke()
     }
 }

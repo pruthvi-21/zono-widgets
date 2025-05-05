@@ -12,13 +12,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.rememberScrollState
@@ -40,15 +38,14 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.jw.zonowidgets.R
-import com.jw.zonowidgets.data.model.CityTimeZoneInfo
 import com.jw.zonowidgets.ui.components.SliderSetting
 import com.jw.zonowidgets.ui.components.SubHeading
 import com.jw.zonowidgets.ui.components.SwitchSetting
 import com.jw.zonowidgets.ui.components.TileSetting
 import com.jw.zonowidgets.ui.theme.ZonoWidgetsTheme
 import com.jw.zonowidgets.ui.theme.defaultShape
+import com.jw.zonowidgets.ui.theme.preferenceSummaryStyle
 import com.jw.zonowidgets.ui.viewmodel.ClockSettingsViewModel
 import com.jw.zonowidgets.ui.viewmodel.ClockSettingsViewModelFactory
 import com.jw.zonowidgets.ui.widget.DualClockAppWidget
@@ -147,8 +144,13 @@ class ClockSettingsActivity : ComponentActivity() {
                 ) {
                     TileSetting(
                         title = stringResource(R.string.first_city),
-                        summary = viewModel.firstTimeZoneInfo.city,
-                        summaryColor = MaterialTheme.colorScheme.primary,
+                        summary = {
+                            Text(
+                                viewModel.firstTimeZoneInfo.city,
+                                style = MaterialTheme.typography.preferenceSummaryStyle,
+                                color = MaterialTheme.colorScheme.primary,
+                            )
+                        },
                         onClick = {
                             viewModel.setTimezoneBeingEdited(1)
                             launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
@@ -157,8 +159,13 @@ class ClockSettingsActivity : ComponentActivity() {
                     HorizontalDivider(Modifier.padding(horizontal = 20.dp))
                     TileSetting(
                         title = stringResource(R.string.second_city),
-                        summary = viewModel.secondTimeZoneInfo.city,
-                        summaryColor = MaterialTheme.colorScheme.primary,
+                        summary = {
+                            Text(
+                                viewModel.secondTimeZoneInfo.city,
+                                style = MaterialTheme.typography.preferenceSummaryStyle,
+                                color = MaterialTheme.colorScheme.primary,
+                            )
+                        },
                         onClick = {
                             viewModel.setTimezoneBeingEdited(2)
                             launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
@@ -169,7 +176,9 @@ class ClockSettingsActivity : ComponentActivity() {
                 SubHeading(
                     label = stringResource(R.string.additional_configuration),
                     icon = painterResource(R.drawable.ic_settings_24dp),
-                    modifier = Modifier.padding(top = 15.dp).padding(horizontal = 12.dp),
+                    modifier = Modifier
+                        .padding(top = 15.dp)
+                        .padding(horizontal = 12.dp),
                 )
 
                 Column(
