@@ -6,13 +6,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
@@ -34,11 +30,10 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.jw.zonowidgets.R
-import com.jw.zonowidgets.data.model.CityTimeZoneInfo
+import com.jw.zonowidgets.ui.components.SubHeading
+import com.jw.zonowidgets.ui.components.TileSetting
 import com.jw.zonowidgets.ui.theme.ZonoWidgetsTheme
 import com.jw.zonowidgets.ui.theme.defaultShape
 import com.jw.zonowidgets.utils.EXTRA_SELECTED_ZONE_ID
@@ -97,17 +92,13 @@ class TimeZonePickerActivity : ComponentActivity() {
 
             grouped.entries.forEachIndexed { index, (initial, zones) ->
                 item {
-                    Text(
-                        text = initial.toString(),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .padding(horizontal = 20.dp, vertical = 4.dp)
-                            .padding(top = 3.dp)
+                    SubHeading(
+                        label = initial.toString(),
+                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
                     )
                 }
                 itemsIndexed(zones) { idx, zone ->
+                    val offset = zone.readableOffset()
                     val shape = when {
                         zones.size == 1 -> cardShape
                         idx == 0 -> cardShape.copy(
@@ -122,11 +113,16 @@ class TimeZonePickerActivity : ComponentActivity() {
 
                         else -> RectangleShape
                     }
-                    ListItem(
-                        timeZoneInfo = zone,
+                    TileSetting(
+                        title = zone.city,
+                        summary = stringResource(R.string.gmt, offset),
                         modifier = Modifier
                             .clip(shape)
-                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                            .background(MaterialTheme.colorScheme.surfaceVariant),
+                        onClick = {
+                            setResult(RESULT_OK, Intent().putExtra(EXTRA_SELECTED_ZONE_ID, zone.id))
+                            finish()
+                        }
                     )
                     if (idx < zones.lastIndex) {
                         HorizontalDivider(
@@ -142,32 +138,6 @@ class TimeZonePickerActivity : ComponentActivity() {
             item {
                 Spacer(Modifier.height(30.dp))
             }
-        }
-    }
-
-    @Composable
-    private fun ListItem(timeZoneInfo: CityTimeZoneInfo, modifier: Modifier) {
-        val offset = timeZoneInfo.readableOffset()
-
-        Column(
-            modifier = modifier
-                .heightIn(min = 64.dp)
-                .fillMaxWidth()
-                .clickable {
-                    setResult(RESULT_OK, Intent().putExtra(EXTRA_SELECTED_ZONE_ID, timeZoneInfo.id))
-                    finish()
-                }
-                .padding(horizontal = 20.dp, vertical = 10.dp)
-        ) {
-            Text(
-                text = timeZoneInfo.city,
-                fontSize = 16.sp,
-            )
-            Text(
-                text = stringResource(R.string.gmt, offset),
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontSize = 13.sp
-            )
         }
     }
 }

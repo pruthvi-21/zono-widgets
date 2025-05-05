@@ -13,19 +13,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -35,24 +30,23 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Slider
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jw.zonowidgets.R
 import com.jw.zonowidgets.data.model.CityTimeZoneInfo
+import com.jw.zonowidgets.ui.components.SliderSetting
+import com.jw.zonowidgets.ui.components.SubHeading
+import com.jw.zonowidgets.ui.components.SwitchSetting
+import com.jw.zonowidgets.ui.components.TileSetting
 import com.jw.zonowidgets.ui.theme.ZonoWidgetsTheme
 import com.jw.zonowidgets.ui.theme.defaultShape
 import com.jw.zonowidgets.ui.viewmodel.ClockSettingsViewModel
@@ -61,7 +55,6 @@ import com.jw.zonowidgets.ui.widget.DualClockAppWidget
 import com.jw.zonowidgets.utils.EXTRA_SELECTED_ZONE_ID
 import com.jw.zonowidgets.utils.WidgetPrefs
 import com.jw.zonowidgets.utils.World
-import kotlin.math.roundToInt
 
 class ClockSettingsActivity : ComponentActivity() {
 
@@ -152,18 +145,20 @@ class ClockSettingsActivity : ComponentActivity() {
                         .clip(defaultShape)
                         .background(MaterialTheme.colorScheme.surfaceVariant),
                 ) {
-                    TimeZoneSettingTile(
+                    TileSetting(
                         title = stringResource(R.string.first_city),
-                        timeZoneInfo = viewModel.firstTimeZoneInfo,
+                        summary = viewModel.firstTimeZoneInfo.city,
+                        summaryColor = MaterialTheme.colorScheme.primary,
                         onClick = {
                             viewModel.setTimezoneBeingEdited(1)
                             launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
                         }
                     )
                     HorizontalDivider(Modifier.padding(horizontal = 20.dp))
-                    TimeZoneSettingTile(
+                    TileSetting(
                         title = stringResource(R.string.second_city),
-                        timeZoneInfo = viewModel.secondTimeZoneInfo,
+                        summary = viewModel.secondTimeZoneInfo.city,
+                        summaryColor = MaterialTheme.colorScheme.primary,
                         onClick = {
                             viewModel.setTimezoneBeingEdited(2)
                             launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
@@ -174,7 +169,7 @@ class ClockSettingsActivity : ComponentActivity() {
                 SubHeading(
                     label = stringResource(R.string.additional_configuration),
                     icon = painterResource(R.drawable.ic_settings_24dp),
-                    modifier = Modifier.padding(top = 15.dp),
+                    modifier = Modifier.padding(top = 15.dp).padding(horizontal = 12.dp),
                 )
 
                 Column(
@@ -196,7 +191,8 @@ class ClockSettingsActivity : ComponentActivity() {
                         onClick = { viewModel.toggleDayNight() },
                     )
                     HorizontalDivider(Modifier.padding(horizontal = 20.dp))
-                    BackgroundOpacitySlider(
+                    SliderSetting(
+                        title = stringResource(R.string.background_opacity_title),
                         value = viewModel.opacityValue,
                         onValueChange = { viewModel.updateOpacity(it) },
                     )
@@ -219,143 +215,6 @@ class ClockSettingsActivity : ComponentActivity() {
             ) {
                 Text(text = stringResource(R.string.save))
             }
-        }
-    }
-
-    @Composable
-    private fun SubHeading(
-        modifier: Modifier = Modifier,
-        label: String,
-        icon: Painter? = null,
-    ) {
-        Row(
-            modifier = modifier
-                .padding(horizontal = 32.dp, vertical = 5.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            icon?.let {
-                Icon(
-                    painter = icon,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(14.dp)
-                )
-            }
-            Text(
-                text = label,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontWeight = FontWeight.Bold,
-            )
-        }
-    }
-
-    @Composable
-    private fun TimeZoneSettingTile(
-        title: String,
-        timeZoneInfo: CityTimeZoneInfo,
-        onClick: () -> Unit,
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 64.dp)
-                .clickable { onClick() }
-                .padding(vertical = 14.dp, horizontal = 20.dp)
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyLarge,
-                fontSize = 16.sp,
-            )
-            Text(
-                text = timeZoneInfo.city,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary,
-            )
-        }
-    }
-
-    @Composable
-    private fun SwitchSetting(
-        modifier: Modifier = Modifier,
-        title: String,
-        summary: String? = null,
-        checked: Boolean,
-        onClick: ((Boolean) -> Unit)? = null,
-    ) {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .heightIn(min = 64.dp)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .clickable {
-                    onClick?.let { it(!checked) }
-                }
-                .padding(vertical = 14.dp, horizontal = 20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(
-                modifier = Modifier.weight(1f),
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.bodyLarge
-                )
-                summary?.let {
-                    Text(
-                        text = it,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
-            Spacer(Modifier.width(10.dp))
-
-            Switch(
-                checked = checked,
-                onCheckedChange = null,
-            )
-        }
-    }
-
-    @Composable
-    fun BackgroundOpacitySlider(
-        value: Float,
-        onValueChange: (Float) -> Unit,
-        modifier: Modifier = Modifier,
-    ) {
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(vertical = 14.dp, horizontal = 20.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = stringResource(R.string.background_opacity_title),
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(bottom = 4.dp),
-                )
-                Spacer(Modifier.weight(1f))
-                Text(
-                    text = "${(value * 100).roundToInt()}%",
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(bottom = 4.dp),
-                )
-            }
-            Slider(
-                value = value,
-                onValueChange = onValueChange,
-                steps = 9,
-                modifier = Modifier.fillMaxWidth()
-            )
         }
     }
 }
