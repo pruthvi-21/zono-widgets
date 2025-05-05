@@ -29,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +37,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.SolidColor
@@ -64,6 +67,7 @@ class TimeZonePickerActivity : ComponentActivity() {
 
         setContent {
             var query by rememberSaveable { mutableStateOf("") }
+            val focusRequester = remember { FocusRequester() }
 
             ZonoWidgetsTheme {
                 Scaffold(
@@ -71,12 +75,16 @@ class TimeZonePickerActivity : ComponentActivity() {
                     topBar = {
                         TopAppBar(
                             title = {
+                                LaunchedEffect(Unit) {
+                                    focusRequester.requestFocus()
+                                }
                                 BasicTextField(
                                     value = query,
                                     onValueChange = { query = it },
                                     singleLine = true,
                                     modifier = Modifier
                                         .fillMaxWidth()
+                                        .focusRequester(focusRequester)
                                         .background(Color.Transparent)
                                         .padding(horizontal = 5.dp),
                                     cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
