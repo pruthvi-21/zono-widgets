@@ -9,10 +9,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CornerSize
@@ -53,6 +55,7 @@ class TimeZonePickerActivity : ComponentActivity() {
         setContent {
             ZonoWidgetsTheme {
                 Scaffold(
+                    contentWindowInsets = WindowInsets.safeDrawing,
                     topBar = {
                         TopAppBar(
                             title = {
@@ -70,7 +73,8 @@ class TimeZonePickerActivity : ComponentActivity() {
                                     )
                                 }
                             },
-                            modifier = Modifier.padding(top = dimensionResource(R.dimen.toolbar_top_margin))
+                            modifier = Modifier.padding(top = dimensionResource(R.dimen.toolbar_top_margin)),
+                            windowInsets = WindowInsets.safeDrawing,
                         )
                     }
                 ) { innerPadding ->
