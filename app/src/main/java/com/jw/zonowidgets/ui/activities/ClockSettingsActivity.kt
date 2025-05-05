@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,17 +30,20 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -55,6 +59,7 @@ import com.jw.zonowidgets.ui.widget.DualClockAppWidget
 import com.jw.zonowidgets.utils.EXTRA_SELECTED_ZONE_ID
 import com.jw.zonowidgets.utils.WidgetPrefs
 import com.jw.zonowidgets.utils.World
+import kotlin.math.roundToInt
 
 class ClockSettingsActivity : ComponentActivity() {
 
@@ -115,6 +120,10 @@ class ClockSettingsActivity : ComponentActivity() {
         var isDayNightModeEnabled by remember { mutableStateOf(prefs.getDayNightSwitch(widgetId)) }
         var is24HourFormatEnabled by remember { mutableStateOf(prefs.getUse24HourFormat(widgetId)) }
 
+        var backgroundOpacityValue by remember {
+            mutableFloatStateOf(prefs.getBackgroundOpacity(widgetId))
+        }
+
         var timezoneBeingEdited by remember { mutableStateOf(1) }
 
         val launcher =
@@ -162,28 +171,36 @@ class ClockSettingsActivity : ComponentActivity() {
                 )
             }
 
-            SwitchSetting(
-                title = stringResource(R.string.format_24_hour_switch_title),
-                checked = is24HourFormatEnabled,
-                onClick = { is24HourFormatEnabled = it },
-                modifier = Modifier.padding(top = 20.dp)
+            SubHeading(
+                label = stringResource(R.string.additional_configuration),
+                icon = painterResource(R.drawable.ic_settings_24dp),
+                modifier = Modifier.padding(top = 15.dp),
             )
 
-            Text(
-                text = stringResource(R.string.background),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontWeight = FontWeight.Bold,
+            Column(
                 modifier = Modifier
-                    .padding(horizontal = 32.dp, vertical = 5.dp)
-                    .padding(top = 15.dp),
-            )
-            SwitchSetting(
-                title = stringResource(R.string.day_night_switch_title),
-                summary = stringResource(R.string.day_night_switch_description),
-                checked = isDayNightModeEnabled,
-                onClick = { isDayNightModeEnabled = it },
-            )
+                    .padding(horizontal = 12.dp)
+                    .clip(defaultShape)
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
+            ) {
+                SwitchSetting(
+                    title = stringResource(R.string.format_24_hour_switch_title),
+                    checked = is24HourFormatEnabled,
+                    onClick = { is24HourFormatEnabled = it },
+                )
+                HorizontalDivider(Modifier.padding(horizontal = 20.dp))
+                SwitchSetting(
+                    title = stringResource(R.string.day_night_switch_title),
+                    summary = stringResource(R.string.day_night_switch_description),
+                    checked = isDayNightModeEnabled,
+                    onClick = { isDayNightModeEnabled = it },
+                )
+                HorizontalDivider(Modifier.padding(horizontal = 20.dp))
+                BackgroundOpacitySlider(
+                    value = backgroundOpacityValue,
+                    onValueChange = { backgroundOpacityValue = it },
+                )
+            }
 
             Spacer(Modifier.weight(1f))
 
@@ -198,6 +215,7 @@ class ClockSettingsActivity : ComponentActivity() {
                     prefs.setCityIdAt(widgetId, 2, secondTimeZoneInfo.id)
                     prefs.setUse24HourFormat(widgetId, is24HourFormatEnabled)
                     prefs.setDayNightSwitch(widgetId, isDayNightModeEnabled)
+                    prefs.setBackgroundOpacity(widgetId, backgroundOpacityValue)
 
                     DualClockAppWidget.updateWidget(this@ClockSettingsActivity, widgetId)
                     setResult(RESULT_OK, Intent().putExtra(EXTRA_APPWIDGET_ID, widgetId))
@@ -206,6 +224,35 @@ class ClockSettingsActivity : ComponentActivity() {
             ) {
                 Text(text = stringResource(R.string.save))
             }
+        }
+    }
+
+    @Composable
+    private fun SubHeading(
+        modifier: Modifier = Modifier,
+        label: String,
+        icon: Painter? = null,
+    ) {
+        Row(
+            modifier = modifier
+                .padding(horizontal = 32.dp, vertical = 5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            icon?.let {
+                Icon(
+                    painter = icon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(14.dp)
+                )
+            }
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontWeight = FontWeight.Bold,
+            )
         }
     }
 
@@ -247,8 +294,6 @@ class ClockSettingsActivity : ComponentActivity() {
             modifier = modifier
                 .fillMaxWidth()
                 .heightIn(min = 64.dp)
-                .padding(horizontal = 12.dp)
-                .clip(defaultShape)
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .clickable {
                     onClick?.let { it(!checked) }
@@ -277,6 +322,44 @@ class ClockSettingsActivity : ComponentActivity() {
             Switch(
                 checked = checked,
                 onCheckedChange = null,
+            )
+        }
+    }
+
+    @Composable
+    fun BackgroundOpacitySlider(
+        value: Float,
+        onValueChange: (Float) -> Unit,
+        modifier: Modifier = Modifier,
+    ) {
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .padding(vertical = 14.dp, horizontal = 20.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = stringResource(R.string.background_opacity_title),
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(bottom = 4.dp),
+                )
+                Spacer(Modifier.weight(1f))
+                Text(
+                    text = "${(value * 100).roundToInt()}%",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(bottom = 4.dp),
+                )
+            }
+            Slider(
+                value = value,
+                onValueChange = onValueChange,
+                steps = 9,
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }

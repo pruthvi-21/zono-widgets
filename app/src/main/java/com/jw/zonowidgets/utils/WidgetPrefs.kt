@@ -29,6 +29,13 @@ class WidgetPrefs(context: Context) {
         prefs.edit { putString("item${position}_${widgetId}", id) }
     }
 
+    fun getBackgroundOpacity(widgetId: Int): Float =
+        prefs.getFloat("background_opacity_$widgetId", 1f)
+
+    fun setBackgroundOpacity(widgetId: Int, value: Float) {
+        prefs.edit { putFloat("background_opacity_$widgetId", value) }
+    }
+
     companion object {
         val DEFAULT_CITY: CityTimeZoneInfo by lazy {
             val currentTimeZoneId = TimeZone.getDefault().id
