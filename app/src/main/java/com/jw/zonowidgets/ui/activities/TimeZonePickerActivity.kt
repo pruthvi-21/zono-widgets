@@ -45,17 +45,16 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jw.zonowidgets.R
 import com.jw.zonowidgets.data.CityRepository
+import com.jw.zonowidgets.ui.components.PreferenceSummaryText
+import com.jw.zonowidgets.ui.components.PreferenceTitleText
 import com.jw.zonowidgets.ui.components.SubHeading
 import com.jw.zonowidgets.ui.components.TileSetting
 import com.jw.zonowidgets.ui.theme.ZonoWidgetsTheme
 import com.jw.zonowidgets.ui.theme.defaultShape
-import com.jw.zonowidgets.ui.theme.preferenceSummaryStyle
-import com.jw.zonowidgets.ui.theme.preferenceTitleStyle
 import com.jw.zonowidgets.utils.EXTRA_SELECTED_ZONE_ID
 import com.jw.zonowidgets.utils.buildColoredString
 import com.jw.zonowidgets.utils.readableOffset
@@ -169,32 +168,17 @@ class TimeZonePickerActivity : ComponentActivity() {
                         else -> RectangleShape
                     }
                     TileSetting(
-                        title = {
-                            Text(
-                                text = buildColoredString(zone.city, query),
-                                style = MaterialTheme.typography.preferenceTitleStyle,
-                            )
-                        },
+                        title = { PreferenceTitleText(buildColoredString(zone.city, query)) },
                         summary = {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.spacedBy(20.dp),
                             ) {
-                                Text(
-                                    buildColoredString(zone.timeZoneId, query),
-                                    style = MaterialTheme.typography.preferenceSummaryStyle,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    modifier = Modifier.weight(1f),
+                                PreferenceSummaryText(
+                                    text = buildColoredString(zone.timeZoneId, query),
+                                    modifier = Modifier.weight(1f)
                                 )
-                                Text(
-                                    stringResource(R.string.gmt, offset),
-                                    style = MaterialTheme.typography.preferenceSummaryStyle,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
+                                PreferenceSummaryText(stringResource(R.string.gmt, offset))
                             }
                         },
                         modifier = Modifier
