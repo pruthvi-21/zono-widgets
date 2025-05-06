@@ -5,6 +5,7 @@ import com.jw.zonowidgets.data.model.CityTimeZoneInfo
 
 object CityRepository {
 
+    // @formatter:off
     private val cities = listOf(
         // UTC
         CityTimeZoneInfo("utc",                                     "UTC (Coordinated Universal Time)",     "Etc/UTC"),
@@ -437,6 +438,7 @@ object CityRepository {
         CityTimeZoneInfo("saipan-saipan",                           "Saipan / Saipan",                      "Pacific/Saipan"),
         CityTimeZoneInfo("tarawa-kiribati",                         "Tarawa / Kiribati",                    "Pacific/Tarawa"),
     )
+    // @formatter:on
 
     fun getAllCities(filterQuery: String = ""): List<CityTimeZoneInfo> = cities.filter {
         it.city.contains(filterQuery, ignoreCase = true) or
