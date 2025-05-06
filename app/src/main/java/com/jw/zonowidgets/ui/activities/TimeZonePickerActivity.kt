@@ -55,7 +55,9 @@ import com.jw.zonowidgets.ui.components.TileSetting
 import com.jw.zonowidgets.ui.theme.ZonoWidgetsTheme
 import com.jw.zonowidgets.ui.theme.defaultShape
 import com.jw.zonowidgets.ui.theme.preferenceSummaryStyle
+import com.jw.zonowidgets.ui.theme.preferenceTitleStyle
 import com.jw.zonowidgets.utils.EXTRA_SELECTED_ZONE_ID
+import com.jw.zonowidgets.utils.buildColoredString
 import com.jw.zonowidgets.utils.readableOffset
 
 class TimeZonePickerActivity : ComponentActivity() {
@@ -167,14 +169,19 @@ class TimeZonePickerActivity : ComponentActivity() {
                         else -> RectangleShape
                     }
                     TileSetting(
-                        title = zone.city,
+                        title = {
+                            Text(
+                                text = buildColoredString(zone.city, query),
+                                style = MaterialTheme.typography.preferenceTitleStyle,
+                            )
+                        },
                         summary = {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.spacedBy(20.dp),
                             ) {
                                 Text(
-                                    zone.timeZoneId,
+                                    buildColoredString(zone.timeZoneId, query),
                                     style = MaterialTheme.typography.preferenceSummaryStyle,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     maxLines = 1,

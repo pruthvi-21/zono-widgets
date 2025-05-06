@@ -1,5 +1,13 @@
 package com.jw.zonowidgets.utils
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import com.jw.zonowidgets.data.model.CityTimeZoneInfo
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -20,4 +28,28 @@ fun CityTimeZoneInfo.readableOffset(): String {
             }
         }
     return formattedOffset
+}
+
+@Composable
+fun buildColoredString(text: String, textToHighlight: String): AnnotatedString {
+    val spanStyle = SpanStyle(
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.primary
+    )
+    val annotatedString = remember(text, textToHighlight) {
+        buildAnnotatedString {
+            val startIndex = text.indexOf(textToHighlight, ignoreCase = true)
+            if (textToHighlight.isBlank() || startIndex == -1) {
+                append(text)
+            } else {
+                append(text.substring(0, startIndex))
+                withStyle(spanStyle) {
+                    append(text.substring(startIndex, startIndex + textToHighlight.length))
+                }
+                append(text.substring(startIndex + textToHighlight.length))
+            }
+        }
+    }
+
+    return annotatedString
 }

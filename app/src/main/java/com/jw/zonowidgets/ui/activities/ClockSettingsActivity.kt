@@ -47,6 +47,7 @@ import com.jw.zonowidgets.ui.components.TileSetting
 import com.jw.zonowidgets.ui.theme.ZonoWidgetsTheme
 import com.jw.zonowidgets.ui.theme.defaultShape
 import com.jw.zonowidgets.ui.theme.preferenceSummaryStyle
+import com.jw.zonowidgets.ui.theme.preferenceTitleStyle
 import com.jw.zonowidgets.ui.viewmodel.ClockSettingsViewModel
 import com.jw.zonowidgets.ui.viewmodel.ClockSettingsViewModelFactory
 import com.jw.zonowidgets.ui.widget.DualClockAppWidget
@@ -143,7 +144,12 @@ class ClockSettingsActivity : ComponentActivity() {
                         .background(MaterialTheme.colorScheme.surfaceVariant),
                 ) {
                     TileSetting(
-                        title = stringResource(R.string.first_city),
+                        title = {
+                            Text(
+                                text = stringResource(R.string.first_city),
+                                style = MaterialTheme.typography.preferenceTitleStyle,
+                            )
+                        },
                         summary = {
                             Text(
                                 viewModel.firstTimeZoneInfo.city,
@@ -158,7 +164,12 @@ class ClockSettingsActivity : ComponentActivity() {
                     )
                     HorizontalDivider(Modifier.padding(horizontal = 20.dp))
                     TileSetting(
-                        title = stringResource(R.string.second_city),
+                        title = {
+                            Text(
+                                text = stringResource(R.string.second_city),
+                                style = MaterialTheme.typography.preferenceTitleStyle,
+                            )
+                        },
                         summary = {
                             Text(
                                 viewModel.secondTimeZoneInfo.city,
