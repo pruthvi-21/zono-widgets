@@ -5,7 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.jw.zonowidgets.receivers.ScheduledUpdateReceiver
+import com.jw.zonowidgets.receivers.WidgetUpdateReceiver
 
 object WidgetUpdateScheduler {
 
@@ -40,7 +40,7 @@ object WidgetUpdateScheduler {
     }
 
     private fun getPendingIntent(context: Context): PendingIntent {
-        val intent = Intent(context, ScheduledUpdateReceiver::class.java).apply {
+        val intent = Intent(context, WidgetUpdateReceiver::class.java).apply {
             action = ACTION_SCHEDULED_WIDGET_UPDATE
         }
 
