@@ -39,6 +39,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jw.zonowidgets.R
+import com.jw.zonowidgets.data.CityRepository
 import com.jw.zonowidgets.ui.components.SliderSetting
 import com.jw.zonowidgets.ui.components.SubHeading
 import com.jw.zonowidgets.ui.components.SwitchSetting
@@ -51,7 +52,6 @@ import com.jw.zonowidgets.ui.viewmodel.ClockSettingsViewModelFactory
 import com.jw.zonowidgets.ui.widget.DualClockAppWidget
 import com.jw.zonowidgets.utils.EXTRA_SELECTED_ZONE_ID
 import com.jw.zonowidgets.utils.WidgetPrefs
-import com.jw.zonowidgets.utils.World
 
 class ClockSettingsActivity : ComponentActivity() {
 
@@ -118,8 +118,8 @@ class ClockSettingsActivity : ComponentActivity() {
 
                 val id = result.data!!.getStringExtra(EXTRA_SELECTED_ZONE_ID)
                     ?: return@rememberLauncherForActivityResult
-                val selected = World.cities.find { it.id == id }
-                        ?: return@rememberLauncherForActivityResult
+                val selected = CityRepository.getCityById(id)
+                    ?: return@rememberLauncherForActivityResult
 
                 if (viewModel.timezoneBeingEdited == 1) {
                     viewModel.updateFirstTimeZone(selected)

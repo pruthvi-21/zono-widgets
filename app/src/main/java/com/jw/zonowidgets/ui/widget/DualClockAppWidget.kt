@@ -8,10 +8,10 @@ import android.content.Intent
 import android.view.View
 import android.widget.RemoteViews
 import com.jw.zonowidgets.R
+import com.jw.zonowidgets.data.CityRepository
 import com.jw.zonowidgets.ui.activities.ClockSettingsActivity
 import com.jw.zonowidgets.utils.WidgetPrefs
 import com.jw.zonowidgets.utils.WidgetUpdateScheduler
-import com.jw.zonowidgets.utils.World
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
@@ -64,7 +64,7 @@ class DualClockAppWidget : AppWidgetProvider() {
             val prefs = WidgetPrefs(context)
 
             val id = prefs.getCityIdAt(widgetId, position)
-            val cityTimeZone = World.cities.firstOrNull { it.id == id } ?: WidgetPrefs.DEFAULT_CITY
+            val cityTimeZone = CityRepository.getCityById(id) ?: CityRepository.defaultCity
 
             return RemoteViews(context.packageName, R.layout.widget_clock).apply {
                 val place = cityTimeZone.city.substringBefore("/")

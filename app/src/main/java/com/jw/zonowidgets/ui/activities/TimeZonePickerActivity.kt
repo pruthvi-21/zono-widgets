@@ -49,13 +49,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jw.zonowidgets.R
+import com.jw.zonowidgets.data.CityRepository
 import com.jw.zonowidgets.ui.components.SubHeading
 import com.jw.zonowidgets.ui.components.TileSetting
 import com.jw.zonowidgets.ui.theme.ZonoWidgetsTheme
 import com.jw.zonowidgets.ui.theme.defaultShape
 import com.jw.zonowidgets.ui.theme.preferenceSummaryStyle
 import com.jw.zonowidgets.utils.EXTRA_SELECTED_ZONE_ID
-import com.jw.zonowidgets.utils.World
 import com.jw.zonowidgets.utils.readableOffset
 
 class TimeZonePickerActivity : ComponentActivity() {
@@ -135,11 +135,7 @@ class TimeZonePickerActivity : ComponentActivity() {
     @Composable
     private fun MyContent(modifier: Modifier, query: String) {
         val grouped = remember(query) {
-            World.cities
-                .filter {
-                    it.city.contains(query, ignoreCase = true) or
-                            it.timeZoneId.contains(query, ignoreCase = true)
-                }
+            CityRepository.getAllCities(filterQuery = query)
                 .sortedBy { it.city }
                 .groupBy { it.city.first() }
         }
