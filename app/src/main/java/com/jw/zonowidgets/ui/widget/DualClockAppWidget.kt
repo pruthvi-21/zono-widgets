@@ -23,6 +23,11 @@ class DualClockAppWidget : AppWidgetProvider() {
         WidgetUpdateScheduler.scheduleNext(context)
     }
 
+    override fun onDisabled(context: Context) {
+        super.onDisabled(context)
+        WidgetUpdateScheduler.cancel(context)
+    }
+
     override fun onUpdate(context: Context, manager: AppWidgetManager, widgetIds: IntArray) {
         super.onUpdate(context, manager, widgetIds)
         widgetIds.forEach { refreshWidget(context, it) }
