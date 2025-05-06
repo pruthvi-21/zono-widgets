@@ -6,9 +6,9 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.jw.zonowidgets.data.CityRepository
 import com.jw.zonowidgets.data.model.CityTimeZoneInfo
 import com.jw.zonowidgets.utils.WidgetPrefs
-import com.jw.zonowidgets.utils.World
 
 class ClockSettingsViewModel(
     private val widgetId: Int,
@@ -67,7 +67,8 @@ class ClockSettingsViewModel(
 
     private fun loadOrDefaultTimeZone(position: Int): CityTimeZoneInfo {
         val savedId = prefs.getCityIdAt(widgetId, position)
-        return World.cities.find { it.id == savedId } ?: WidgetPrefs.DEFAULT_CITY.also {
+        return CityRepository.getCityById(savedId)
+            ?: CityRepository.defaultCity.also {
             prefs.setCityIdAt(widgetId, position, it.id)
         }
     }

@@ -1,9 +1,7 @@
 package com.jw.zonowidgets.utils
 
 import android.content.Context
-import android.icu.util.TimeZone
 import androidx.core.content.edit
-import com.jw.zonowidgets.data.model.CityTimeZoneInfo
 
 class WidgetPrefs(context: Context) {
     private val prefs = context.getSharedPreferences("widget_prefs", Context.MODE_PRIVATE)
@@ -34,12 +32,5 @@ class WidgetPrefs(context: Context) {
 
     fun setBackgroundOpacity(widgetId: Int, value: Float) {
         prefs.edit { putFloat("background_opacity_$widgetId", value) }
-    }
-
-    companion object {
-        val DEFAULT_CITY: CityTimeZoneInfo by lazy {
-            val currentTimeZoneId = TimeZone.getDefault().id
-            World.cities.find { it.timeZoneId == currentTimeZoneId } ?: World.cities.first()
-        }
     }
 }
