@@ -12,6 +12,7 @@ import com.jw.zonowidgets.data.CityRepository
 import com.jw.zonowidgets.ui.activities.ClockSettingsActivity
 import com.jw.zonowidgets.utils.WidgetPrefs
 import com.jw.zonowidgets.utils.WidgetUpdateScheduler
+import com.jw.zonowidgets.utils.getCityName
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
@@ -67,7 +68,8 @@ class DualClockAppWidget : AppWidgetProvider() {
             val cityTimeZone = CityRepository.getCityById(id) ?: CityRepository.defaultCity
 
             return RemoteViews(context.packageName, R.layout.widget_clock).apply {
-                val place = cityTimeZone.city.substringBefore("/")
+                val cityName = cityTimeZone.getCityName(context)
+                val place = cityName.substringBefore("/")
                 setTextViewText(R.id.place, place)
 
                 val tz = ZoneId.of(cityTimeZone.timeZoneId)

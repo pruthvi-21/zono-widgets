@@ -57,6 +57,7 @@ import com.jw.zonowidgets.ui.theme.ZonoWidgetsTheme
 import com.jw.zonowidgets.ui.theme.defaultShape
 import com.jw.zonowidgets.utils.EXTRA_SELECTED_ZONE_ID
 import com.jw.zonowidgets.utils.buildColoredString
+import com.jw.zonowidgets.utils.getCityName
 import com.jw.zonowidgets.utils.readableOffset
 
 class TimeZonePickerActivity : ComponentActivity() {
@@ -137,8 +138,8 @@ class TimeZonePickerActivity : ComponentActivity() {
     private fun MyContent(modifier: Modifier, query: String) {
         val grouped = remember(query) {
             CityRepository.getAllCities(filterQuery = query)
-                .sortedBy { it.city }
-                .groupBy { it.city.first() }
+                .sortedBy { it.getCityName(this) }
+                .groupBy { it.getCityName(this).first() }
         }
         val cardShape = defaultShape
 
@@ -168,7 +169,14 @@ class TimeZonePickerActivity : ComponentActivity() {
                         else -> RectangleShape
                     }
                     TileSetting(
-                        title = { PreferenceTitleText(buildColoredString(zone.city, query)) },
+                        title = {
+                            PreferenceTitleText(
+                                buildColoredString(
+                                    zone.getCityName(this@TimeZonePickerActivity),
+                                    query
+                                )
+                            )
+                        },
                         summary = {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
