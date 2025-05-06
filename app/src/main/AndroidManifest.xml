@@ -39,16 +39,14 @@
             android:exported="false" />
 
         <receiver
-            android:name=".receivers.ScheduledUpdateReceiver"
-            android:exported="false" />
-        <receiver
-            android:name=".receivers.BootOrUpdateReceiver"
+            android:name=".receivers.WidgetUpdateReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
                 <action android:name="android.intent.action.TIME_SET" />
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="com.jw.zonowidgets.action.SCHEDULED_WIDGET_UPDATE" />
             </intent-filter>
         </receiver>
 
