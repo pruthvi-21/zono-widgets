@@ -1,5 +1,6 @@
 package com.jw.zonowidgets.utils
 
+import android.content.Context
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -28,6 +29,10 @@ fun CityTimeZoneInfo.readableOffset(): String {
             }
         }
     return formattedOffset
+}
+
+fun CityTimeZoneInfo.getCityName(context: Context): String {
+    return context.getString(cityRes)
 }
 
 @Composable

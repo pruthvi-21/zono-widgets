@@ -148,7 +148,7 @@ class ClockSettingsActivity : ComponentActivity() {
                         title = { PreferenceTitleText(stringResource(R.string.first_city)) },
                         summary = {
                             PreferenceSummaryText(
-                                text = viewModel.firstTimeZoneInfo.city,
+                                text = stringResource(viewModel.firstTimeZoneInfo.cityRes),
                                 color = MaterialTheme.colorScheme.primary,
                             )
                         },
@@ -162,7 +162,7 @@ class ClockSettingsActivity : ComponentActivity() {
                         title = { PreferenceTitleText(stringResource(R.string.second_city)) },
                         summary = {
                             PreferenceSummaryText(
-                                text = viewModel.secondTimeZoneInfo.city,
+                                text = stringResource(viewModel.secondTimeZoneInfo.cityRes),
                                 style = MaterialTheme.typography.preferenceSummaryStyle,
                                 color = MaterialTheme.colorScheme.primary,
                             )
