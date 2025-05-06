@@ -409,9 +409,20 @@ object CityRepository {
     )
     // @formatter:on
 
-    fun getAllCities(filterQuery: String = ""): List<CityTimeZoneInfo> = cities.filter {
-        it.id.contains(filterQuery, ignoreCase = true) or
-                it.timeZoneId.contains(filterQuery, ignoreCase = true)
+    fun getAllCities(filterQuery: String = ""): List<CityTimeZoneInfo> {
+        if (filterQuery.isBlank()) return cities
+
+        val normalizedQuery = filterQuery.trim().lowercase()
+
+        return cities.filter { city ->
+            val id = city.id.lowercase()
+            val zone = city.timeZoneId.lowercase()
+            val parts = city.id.replace("__", " ").replace("_", " ")
+
+            id.contains(normalizedQuery) ||
+                    zone.contains(normalizedQuery) ||
+                    parts.contains(normalizedQuery)
+        }
     }
 
     fun getCityById(id: String?): CityTimeZoneInfo? = cities.find { it.id == id }
