@@ -40,6 +40,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jw.zonowidgets.R
 import com.jw.zonowidgets.data.CityRepository
+import com.jw.zonowidgets.ui.components.PreferenceSummaryText
+import com.jw.zonowidgets.ui.components.PreferenceTitleText
 import com.jw.zonowidgets.ui.components.SliderSetting
 import com.jw.zonowidgets.ui.components.SubHeading
 import com.jw.zonowidgets.ui.components.SwitchSetting
@@ -47,7 +49,6 @@ import com.jw.zonowidgets.ui.components.TileSetting
 import com.jw.zonowidgets.ui.theme.ZonoWidgetsTheme
 import com.jw.zonowidgets.ui.theme.defaultShape
 import com.jw.zonowidgets.ui.theme.preferenceSummaryStyle
-import com.jw.zonowidgets.ui.theme.preferenceTitleStyle
 import com.jw.zonowidgets.ui.viewmodel.ClockSettingsViewModel
 import com.jw.zonowidgets.ui.viewmodel.ClockSettingsViewModelFactory
 import com.jw.zonowidgets.ui.widget.DualClockAppWidget
@@ -144,16 +145,10 @@ class ClockSettingsActivity : ComponentActivity() {
                         .background(MaterialTheme.colorScheme.surfaceVariant),
                 ) {
                     TileSetting(
-                        title = {
-                            Text(
-                                text = stringResource(R.string.first_city),
-                                style = MaterialTheme.typography.preferenceTitleStyle,
-                            )
-                        },
+                        title = { PreferenceTitleText(stringResource(R.string.first_city)) },
                         summary = {
-                            Text(
-                                viewModel.firstTimeZoneInfo.city,
-                                style = MaterialTheme.typography.preferenceSummaryStyle,
+                            PreferenceSummaryText(
+                                text = viewModel.firstTimeZoneInfo.city,
                                 color = MaterialTheme.colorScheme.primary,
                             )
                         },
@@ -164,15 +159,10 @@ class ClockSettingsActivity : ComponentActivity() {
                     )
                     HorizontalDivider(Modifier.padding(horizontal = 20.dp))
                     TileSetting(
-                        title = {
-                            Text(
-                                text = stringResource(R.string.second_city),
-                                style = MaterialTheme.typography.preferenceTitleStyle,
-                            )
-                        },
+                        title = { PreferenceTitleText(stringResource(R.string.second_city)) },
                         summary = {
-                            Text(
-                                viewModel.secondTimeZoneInfo.city,
+                            PreferenceSummaryText(
+                                text = viewModel.secondTimeZoneInfo.city,
                                 style = MaterialTheme.typography.preferenceSummaryStyle,
                                 color = MaterialTheme.colorScheme.primary,
                             )
