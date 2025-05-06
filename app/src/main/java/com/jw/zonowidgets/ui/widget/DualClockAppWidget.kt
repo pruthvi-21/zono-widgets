@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.view.View
 import android.widget.RemoteViews
 import com.jw.zonowidgets.R
@@ -33,17 +34,25 @@ class DualClockAppWidget : AppWidgetProvider() {
         widgetIds.forEach { refreshWidget(context, it) }
     }
 
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle,
+    ) {
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+        refreshWidget(context, appWidgetId)
+    }
+
     companion object {
 
         fun refreshWidget(context: Context, widgetId: Int) {
-            val views = RemoteViews(context.packageName, R.layout.widget_dual_clock)
-            views.removeAllViews(R.id.root)
+            val views = RemoteViews(context.packageName, R.layout.widget_dual_clock).apply {
+                removeAllViews(R.id.root)
 
-            val view1 = buildRemoteView(context, widgetId, 1)
-            val view2 = buildRemoteView(context, widgetId, 2)
-
-            views.addView(R.id.root, view1)
-            views.addView(R.id.root, view2)
+                addView(R.id.root, buildRemoteView(context, widgetId, 1))
+                addView(R.id.root, buildRemoteView(context, widgetId, 2))
+            }
 
             val configIntent = Intent(context, ClockSettingsActivity::class.java).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
@@ -67,7 +76,15 @@ class DualClockAppWidget : AppWidgetProvider() {
             val id = prefs.getCityIdAt(widgetId, position)
             val cityTimeZone = CityRepository.getCityById(id) ?: CityRepository.defaultCity
 
-            return RemoteViews(context.packageName, R.layout.widget_clock).apply {
+            val minHeight = AppWidgetManager
+                .getInstance(context)
+                .getAppWidgetOptions(widgetId)
+                .getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
+
+            val layoutId = if (minHeight < 100 && minHeight != 0) R.layout.widget_clock_compact
+            else R.layout.widget_clock
+
+            return RemoteViews(context.packageName, layoutId).apply {
                 val cityName = cityTimeZone.getCityName(context)
                 val place = cityName.substringBefore("/")
                 setTextViewText(R.id.place, place)
