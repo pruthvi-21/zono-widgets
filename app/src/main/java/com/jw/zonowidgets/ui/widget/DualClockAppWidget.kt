@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.widget.RemoteViews
-import androidx.core.graphics.toColorInt
 import com.jw.zonowidgets.R
 import com.jw.zonowidgets.ui.activities.ClockSettingsActivity
 import com.jw.zonowidgets.utils.WidgetPrefs
@@ -88,7 +87,9 @@ class DualClockAppWidget : AppWidgetProvider() {
                     val hour = now.hour
                     val isDayTime = hour in 6..17
 
-                    val color = if (isDayTime) "#FF9C00".toColorInt() else "#C1C0FD".toColorInt()
+                    val color = if (isDayTime) context.getColor(R.color.text_color_day)
+                    else context.getColor(R.color.text_color_night)
+
                     setTextColor(R.id.place, color)
                     setTextColor(R.id.date, color)
                     setTextColor(R.id.time, color)

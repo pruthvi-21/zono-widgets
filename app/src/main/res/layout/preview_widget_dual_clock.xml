@@ -4,6 +4,7 @@
     android:id="@+id/root"
     android:layout_width="400dp"
     android:layout_height="130dp"
+    android:baselineAligned="false"
     android:gravity="center"
     android:orientation="horizontal">
 
@@ -31,7 +32,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="New York"
-                android:textColor="#FF9C00"
+                android:textColor="@color/text_color_day"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -52,7 +53,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Wed, 01 Jan"
-            android:textColor="#FF9C00"
+            android:textColor="@color/text_color_day"
             android:textSize="14sp" />
 
         <LinearLayout
@@ -66,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="12:00"
-                android:textColor="#FF9C00"
+                android:textColor="@color/text_color_day"
                 android:textSize="32sp" />
 
             <TextView
@@ -75,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="4dp"
                 android:text="pm"
-                android:textColor="#FF9C00"
+                android:textColor="@color/text_color_day"
                 android:textSize="16sp"
                 tools:ignore="RtlSymmetry" />
         </LinearLayout>
@@ -104,7 +105,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="Tokyo"
-                android:textColor="#C1C0FD"
+                android:textColor="@color/text_color_night"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -124,7 +125,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Thu, 02 Jan"
-            android:textColor="#C1C0FD"
+            android:textColor="@color/text_color_night"
             android:textSize="14sp" />
 
         <LinearLayout
@@ -137,7 +138,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="02:00"
-                android:textColor="#C1C0FD"
+                android:textColor="@color/text_color_night"
                 android:textSize="32sp" />
 
             <TextView
@@ -145,7 +146,7 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="4dp"
                 android:text="am"
-                android:textColor="#C1C0FD"
+                android:textColor="@color/text_color_night"
                 android:textSize="16sp"
                 tools:ignore="RtlSymmetry" />
         </LinearLayout>
