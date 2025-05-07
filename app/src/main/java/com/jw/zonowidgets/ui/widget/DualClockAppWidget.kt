@@ -16,6 +16,7 @@ import com.jw.zonowidgets.utils.WidgetUpdateScheduler
 import com.jw.zonowidgets.utils.getCityName
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.util.Locale
 
 class DualClockAppWidget : AppWidgetProvider() {
 
@@ -93,7 +94,23 @@ class DualClockAppWidget : AppWidgetProvider() {
 
                 setString(R.id.date, "setTimeZone", tz.id)
                 setString(R.id.time, "setTimeZone", tz.id)
-                setString(R.id.amPmText, "setTimeZone", tz.id)
+
+                val locale = Locale.getDefault()
+                val amPmTextId = when (locale.language) {
+                    "ja", "ko", "zh", "vi", "fa", "ar", "he" -> {
+                        setViewVisibility(R.id.amPmTextBefore, View.VISIBLE)
+                        setViewVisibility(R.id.amPmTextAfter, View.GONE)
+                        R.id.amPmTextBefore
+                    }
+
+                    else -> {
+                        setViewVisibility(R.id.amPmTextBefore, View.GONE)
+                        setViewVisibility(R.id.amPmTextAfter, View.VISIBLE)
+                        R.id.amPmTextAfter
+                    }
+                }
+
+                setString(amPmTextId, "setTimeZone", tz.id)
 
                 val isDayNightEnabled = prefs.getDayNightSwitch(widgetId)
                 val use24Hour = prefs.getUse24HourFormat(widgetId)
@@ -112,7 +129,7 @@ class DualClockAppWidget : AppWidgetProvider() {
                     setTextColor(R.id.place, color)
                     setTextColor(R.id.date, color)
                     setTextColor(R.id.time, color)
-                    setTextColor(R.id.amPmText, color)
+                    setTextColor(amPmTextId, color)
 
                     val backgroundRes =
                         if (isDayTime) R.drawable.bg_widget_clock_day
@@ -124,13 +141,13 @@ class DualClockAppWidget : AppWidgetProvider() {
                 }
 
                 if (use24Hour) {
-                    setCharSequence(R.id.time, "setFormat24Hour", "HH:mm")
+                    setCharSequence(R.id.time, "setFormat24Hour", context.getString(R.string.widget_format_time_24))
                     setCharSequence(R.id.time, "setFormat12Hour", null)
-                    setInt(R.id.amPmText, "setVisibility", View.GONE)
+                    setInt(amPmTextId, "setVisibility", View.GONE)
                 } else {
-                    setCharSequence(R.id.time, "setFormat12Hour", "hh:mm")
+                    setCharSequence(R.id.time, "setFormat12Hour", context.getString(R.string.widget_format_time_12))
                     setCharSequence(R.id.time, "setFormat24Hour", null)
-                    setInt(R.id.amPmText, "setVisibility", View.VISIBLE)
+                    setInt(amPmTextId, "setVisibility", View.VISIBLE)
                 }
             }
         }
