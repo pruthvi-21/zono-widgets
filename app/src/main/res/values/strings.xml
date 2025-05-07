@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Zono Widgets</string>
     <string name="clock_settings">Clock settings</string>
@@ -12,7 +13,6 @@
     <string name="unable_to_open_settings">Unable to open settings</string>
     <string name="select_your_city">Select your city</string>
     <string name="navigate_up">Navigate up</string>
-    <string name="gmt" translatable="false">GMT%1$s</string>
     <string name="background_opacity_title">Background opacity</string>
     <string name="search_cities">City/country/region</string>
 
@@ -23,7 +23,7 @@
     <string name="city_angola__luanda">Luanda / Angola</string>
     <string name="city_anguilla__the_valley">The Valley / Anguilla</string>
     <string name="city_argentina__buenos_aires">Buenos Aires / Argentina</string>
-    <string name="city_argentina__c_rdoba">Córdoba / Argentina</string>
+    <string name="city_argentina__cordoba">Cordoba / Argentina</string>
     <string name="city_argentina__rosario">Rosario / Argentina</string>
     <string name="city_armenia__yerevan">Yerevan / Armenia</string>
     <string name="city_australia__adelaide">Adelaide / Australia</string>
@@ -47,19 +47,19 @@
     <string name="city_bolivia__santa_cruz">Santa Cruz / Bolivia</string>
     <string name="city_botswana__gaborone">Gaborone / Botswana</string>
     <string name="city_brazil__belo_horizonte">Belo Horizonte / Brazil</string>
-    <string name="city_brazil__bras_lia">Brasília / Brazil</string>
+    <string name="city_brazil__brasilia">Brasilia / Brazil</string>
     <string name="city_brazil__fortaleza">Fortaleza / Brazil</string>
     <string name="city_brazil__recife">Recife / Brazil</string>
     <string name="city_brazil__rio_de_janeiro">Rio de Janeiro / Brazil</string>
     <string name="city_brazil__salvador">Salvador / Brazil</string>
-    <string name="city_brazil__sao_paulo">São Paulo / Brazil</string>
+    <string name="city_brazil__sao_paulo">Sao Paulo / Brazil</string>
     <string name="city_brunei__bandar_seri_begawan">Bandar Seri Begawan / Brunei</string>
     <string name="city_bulgaria__sofia">Sofia / Bulgaria</string>
     <string name="city_burkina_faso__ouagadougou">Ouagadougou / Burkina Faso</string>
     <string name="city_burundi__bujumbura">Bujumbura / Burundi</string>
     <string name="city_cambodia__phnom_penh">Phnom Penh / Cambodia</string>
     <string name="city_cameroon__douala">Douala / Cameroon</string>
-    <string name="city_cameroon__yaound">Yaoundé / Cameroon</string>
+    <string name="city_cameroon__yaounde">Yaounde / Cameroon</string>
     <string name="city_canada__calgary">Calgary / Canada</string>
     <string name="city_canada__edmonton">Edmonton / Canada</string>
     <string name="city_canada__halifax">Halifax / Canada</string>
@@ -76,9 +76,9 @@
     <string name="city_canada__winnipeg">Winnipeg / Canada</string>
     <string name="city_central_african_republic__bangui">Bangui / Central African Republic</string>
     <string name="city_chad__n_djamena">N\'Djamena / Chad</string>
-    <string name="city_chile__concepci_n">Concepción / Chile</string>
+    <string name="city_chile__concepcion">Concepcion / Chile</string>
     <string name="city_chile__santiago">Santiago / Chile</string>
-    <string name="city_chile__valpara_so">Valparaíso / Chile</string>
+    <string name="city_chile__valparaiso">Valparaiso / Chile</string>
     <string name="city_china__beijing">Beijing / China</string>
     <string name="city_china__changchun">Changchun / China</string>
     <string name="city_china__chengdu">Chengdu / China</string>
@@ -102,15 +102,15 @@
     <string name="city_china__wuhan">Wuhan / China</string>
     <string name="city_china__xi_an">Xi\'an / China</string>
     <string name="city_china__zhengzhou">Zhengzhou / China</string>
-    <string name="city_colombia__bogot">Bogotá / Colombia</string>
+    <string name="city_colombia__bogota">Bogota / Colombia</string>
     <string name="city_colombia__cali">Cali / Colombia</string>
-    <string name="city_colombia__medell_n">Medellín / Colombia</string>
-    <string name="city_costa_rica__san_jos">San José / Costa Rica</string>
+    <string name="city_colombia__medellin">Medellin / Colombia</string>
+    <string name="city_costa_rica__san_jose">San Jose / Costa Rica</string>
     <string name="city_croatia__zagreb">Zagreb / Croatia</string>
     <string name="city_cuba__havana">Havana / Cuba</string>
     <string name="city_czech_republic__prague">Prague / Czech Republic</string>
-    <string name="city_cote_d_ivoire__abidjan">Abidjan / Côte d\'Ivoire</string>
-    <string name="city_cote_d_ivoire__yamoussoukro">Yamoussoukro / Côte d\'Ivoire</string>
+    <string name="city_cote_d_ivoire__abidjan">Abidjan / Cote d\'Ivoire</string>
+    <string name="city_cote_d_ivoire__yamoussoukro">Yamoussoukro / Cote d\'Ivoire</string>
     <string name="city_dr_congo__kinshasa">Kinshasa / DR Congo</string>
     <string name="city_dr_congo__lubumbashi">Lubumbashi / DR Congo</string>
     <string name="city_denmark__copenhagen">Copenhagen / Denmark</string>
@@ -202,10 +202,10 @@
     <string name="city_malaysia__kuching">Kuching / Malaysia</string>
     <string name="city_mali__bamako">Bamako / Mali</string>
     <string name="city_mauritania__nouakchott">Nouakchott / Mauritania</string>
-    <string name="city_mexico__ciudad_ju_rez">Ciudad Juárez / Mexico</string>
+    <string name="city_mexico__ciudad_juarez">Ciudad Juarez / Mexico</string>
     <string name="city_mexico__guadalajara">Guadalajara / Mexico</string>
-    <string name="city_mexico__le_n">León / Mexico</string>
-    <string name="city_mexico__mazatl_n">Mazatlán / Mexico</string>
+    <string name="city_mexico__leon">Leon / Mexico</string>
+    <string name="city_mexico__mazatlan">Mazatlan / Mexico</string>
     <string name="city_mexico__mexico_city">Mexico City / Mexico</string>
     <string name="city_mexico__monterrey">Monterrey / Mexico</string>
     <string name="city_mexico__puebla">Puebla / Mexico</string>
@@ -222,7 +222,7 @@
     <string name="city_nepal__kathmandu">Kathmandu / Nepal</string>
     <string name="city_netherlands__amsterdam">Amsterdam / Netherlands</string>
     <string name="city_netherlands__rotterdam">Rotterdam / Netherlands</string>
-    <string name="city_new_caledonia__noum_a">Nouméa / New Caledonia</string>
+    <string name="city_new_caledonia__noumea">Noumea / New Caledonia</string>
     <string name="city_new_zealand__auckland">Auckland / New Zealand</string>
     <string name="city_new_zealand__christchurch">Christchurch / New Zealand</string>
     <string name="city_new_zealand__wellington">Wellington / New Zealand</string>
@@ -241,13 +241,13 @@
     <string name="city_palau__koror">Koror / Palau</string>
     <string name="city_panama__panama_city">Panama City / Panama</string>
     <string name="city_papua_new_guinea__port_moresby">Port Moresby / Papua New Guinea</string>
-    <string name="city_paraguay__asunci_n">Asunción / Paraguay</string>
+    <string name="city_paraguay__asuncion">Asuncion / Paraguay</string>
     <string name="city_peru__arequipa">Arequipa / Peru</string>
     <string name="city_peru__lima">Lima / Peru</string>
     <string name="city_philippines__cebu">Cebu / Philippines</string>
     <string name="city_philippines__davao_city">Davao City / Philippines</string>
     <string name="city_philippines__manila">Manila / Philippines</string>
-    <string name="city_poland__krak_w">Kraków / Poland</string>
+    <string name="city_poland__krakow">Krakow / Poland</string>
     <string name="city_poland__warsaw">Warsaw / Poland</string>
     <string name="city_portugal__lisbon">Lisbon / Portugal</string>
     <string name="city_portugal__porto">Porto / Portugal</string>
@@ -311,7 +311,7 @@
     <string name="city_switzerland__naters">Naters / Switzerland</string>
     <string name="city_switzerland__zurich">Zurich / Switzerland</string>
     <string name="city_syria__damascus">Damascus / Syria</string>
-    <string name="city_s_o_tom_and_pr_ncipe__s_o_tom">São Tomé / São Tomé and Príncipe</string>
+    <string name="city_sao_tome_and_principe__sao_tome">Sao Tome / Sao Tome and Principe</string>
     <string name="city_taiwan__kaohsiung">Kaohsiung / Taiwan</string>
     <string name="city_taiwan__taipei">Taipei / Taiwan</string>
     <string name="city_tajikistan__dushanbe">Dushanbe / Tajikistan</string>
@@ -319,7 +319,7 @@
     <string name="city_thailand__bangkok">Bangkok / Thailand</string>
     <string name="city_thailand__phuket">Phuket / Thailand</string>
     <string name="city_timor_leste__dili">Dili / Timor-Leste</string>
-    <string name="city_togo__lom">Lomé / Togo</string>
+    <string name="city_togo__lome">Lome / Togo</string>
     <string name="city_tonga__nuku_alofa">Nuku\'alofa / Tonga</string>
     <string name="city_trinidad_and_tobago__port_of_spain">Port of Spain / Trinidad and Tobago</string>
     <string name="city_tunisia__tunis">Tunis / Tunisia</string>
