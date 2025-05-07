@@ -6,13 +6,6 @@ import androidx.core.content.edit
 class WidgetPrefs(context: Context) {
     private val prefs = context.getSharedPreferences("widget_prefs", Context.MODE_PRIVATE)
 
-    fun getUse24HourFormat(widgetId: Int): Boolean =
-        prefs.getBoolean("use_24_hour_$widgetId", false)
-
-    fun setUse24HourFormat(widgetId: Int, value: Boolean) {
-        prefs.edit { putBoolean("use_24_hour_$widgetId", value) }
-    }
-
     fun getDayNightSwitch(widgetId: Int): Boolean =
         prefs.getBoolean("day_night_switch_$widgetId", true)
 

@@ -113,7 +113,6 @@ class DualClockAppWidget : AppWidgetProvider() {
                 setString(amPmTextId, "setTimeZone", tz.id)
 
                 val isDayNightEnabled = prefs.getDayNightSwitch(widgetId)
-                val use24Hour = prefs.getUse24HourFormat(widgetId)
                 val backgroundOpacity = prefs.getBackgroundOpacity(widgetId)
 
                 setFloat(R.id.background, "setAlpha", backgroundOpacity)
@@ -138,16 +137,6 @@ class DualClockAppWidget : AppWidgetProvider() {
 
                     val iconRes = if (isDayTime) R.drawable.ic_sun_24dp else R.drawable.ic_moon_24dp
                     setImageViewResource(R.id.icon, iconRes)
-                }
-
-                if (use24Hour) {
-                    setCharSequence(R.id.time, "setFormat24Hour", context.getString(R.string.widget_format_time_24))
-                    setCharSequence(R.id.time, "setFormat12Hour", null)
-                    setInt(amPmTextId, "setVisibility", View.GONE)
-                } else {
-                    setCharSequence(R.id.time, "setFormat12Hour", context.getString(R.string.widget_format_time_12))
-                    setCharSequence(R.id.time, "setFormat24Hour", null)
-                    setInt(amPmTextId, "setVisibility", View.VISIBLE)
                 }
             }
         }

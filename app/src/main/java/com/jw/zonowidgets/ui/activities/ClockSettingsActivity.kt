@@ -189,12 +189,6 @@ class ClockSettingsActivity : ComponentActivity() {
                         .background(MaterialTheme.colorScheme.surfaceVariant),
                 ) {
                     SwitchSetting(
-                        title = stringResource(R.string.format_24_hour_switch_title),
-                        checked = viewModel.is24HourFormatEnabled,
-                        onClick = { viewModel.toggle24HourFormat() },
-                    )
-                    HorizontalDivider(Modifier.padding(horizontal = 20.dp))
-                    SwitchSetting(
                         title = stringResource(R.string.day_night_switch_title),
                         summary = stringResource(R.string.day_night_switch_description),
                         checked = viewModel.isDayNightModeEnabled,

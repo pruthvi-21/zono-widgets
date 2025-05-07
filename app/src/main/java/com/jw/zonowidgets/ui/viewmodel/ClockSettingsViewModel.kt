@@ -24,9 +24,6 @@ class ClockSettingsViewModel(
     private val _isDayNightModeEnabled = mutableStateOf(prefs.getDayNightSwitch(widgetId))
     val isDayNightModeEnabled by _isDayNightModeEnabled
 
-    private val _is24HourFormatEnabled = mutableStateOf(prefs.getUse24HourFormat(widgetId))
-    val is24HourFormatEnabled by _is24HourFormatEnabled
-
     private val _opacityValue = mutableFloatStateOf(prefs.getBackgroundOpacity(widgetId))
     val opacityValue by _opacityValue
 
@@ -45,10 +42,6 @@ class ClockSettingsViewModel(
         _isDayNightModeEnabled.value = !isDayNightModeEnabled
     }
 
-    fun toggle24HourFormat() {
-        _is24HourFormatEnabled.value = !is24HourFormatEnabled
-    }
-
     fun updateOpacity(value: Float) {
         _opacityValue.floatValue = value
     }
@@ -60,7 +53,6 @@ class ClockSettingsViewModel(
     fun saveSettings() {
         prefs.setCityIdAt(widgetId, 1, firstTimeZoneInfo.id)
         prefs.setCityIdAt(widgetId, 2, secondTimeZoneInfo.id)
-        prefs.setUse24HourFormat(widgetId, is24HourFormatEnabled)
         prefs.setDayNightSwitch(widgetId, isDayNightModeEnabled)
         prefs.setBackgroundOpacity(widgetId, opacityValue)
     }
