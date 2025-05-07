@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root"
     android:layout_width="400dp"
     android:layout_height="130dp"
     android:baselineAligned="false"
@@ -23,12 +22,10 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/place"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/icon"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="New York"
@@ -37,7 +34,6 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentEnd="true"
@@ -48,7 +44,6 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -63,7 +58,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="12:00"
@@ -71,7 +65,6 @@
                 android:textSize="32sp" />
 
             <TextView
-                android:id="@+id/amPmText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="4dp"
@@ -101,7 +94,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/icon1"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="Tokyo"
@@ -110,7 +102,6 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/icon1"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentEnd="true"
