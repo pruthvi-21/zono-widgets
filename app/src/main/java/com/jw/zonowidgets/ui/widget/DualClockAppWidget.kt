@@ -97,7 +97,7 @@ class DualClockAppWidget : AppWidgetProvider() {
 
                 val locale = Locale.getDefault()
                 val amPmTextId = when (locale.language) {
-                    "ja", "ko", "zh", "vi", "fa", "ar", "he" -> {
+                    "ja", "ko", "zh" -> {
                         setViewVisibility(R.id.amPmTextBefore, View.VISIBLE)
                         setViewVisibility(R.id.amPmTextAfter, View.GONE)
                         R.id.amPmTextBefore
