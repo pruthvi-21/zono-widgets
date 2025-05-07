@@ -25,7 +25,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layoutDirection="locale">
 
             <TextView
                 android:id="@+id/place"
@@ -39,6 +40,8 @@
                 android:textColor="@android:color/white"
                 android:textSize="14sp"
                 android:textStyle="bold"
+                android:gravity="start"
+                android:textDirection="locale"
                 tools:text="Seoul" />
 
             <ImageView
@@ -63,22 +66,11 @@
             android:timeZone="Asia/Tokyo" />
 
         <LinearLayout
+            android:id="@+id/time_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="bottom"
             android:orientation="horizontal">
-
-            <TextClock
-                android:id="@+id/amPmTextBefore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:format12Hour="a"
-                android:format24Hour=""
-                android:paddingEnd="4dp"
-                android:visibility="gone"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                tools:ignore="RtlSymmetry" />
 
             <TextClock
                 android:id="@+id/time"
@@ -90,7 +82,7 @@
                 android:textSize="32sp" />
 
             <TextClock
-                android:id="@+id/amPmTextAfter"
+                android:id="@+id/amPmText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:format12Hour="a"

@@ -24,22 +24,11 @@
         android:paddingHorizontal="10dp">
 
         <LinearLayout
+            android:id="@+id/time_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="bottom"
             android:orientation="horizontal">
-
-            <TextClock
-                android:id="@+id/amPmTextBefore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:format12Hour="a"
-                android:format24Hour="a"
-                android:paddingStart="4dp"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                android:visibility="gone"
-                tools:ignore="RtlSymmetry" />
 
             <TextClock
                 android:id="@+id/time"
@@ -51,7 +40,7 @@
                 android:textSize="26sp" />
 
             <TextClock
-                android:id="@+id/amPmTextAfter"
+                android:id="@+id/amPmText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:format12Hour="a"

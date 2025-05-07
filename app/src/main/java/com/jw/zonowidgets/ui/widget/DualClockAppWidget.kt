@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.RemoteViews
+import androidx.core.text.layoutDirection
 import com.jw.zonowidgets.R
 import com.jw.zonowidgets.data.CityRepository
 import com.jw.zonowidgets.ui.activities.ClockSettingsActivity
@@ -96,21 +97,16 @@ class DualClockAppWidget : AppWidgetProvider() {
                 setString(R.id.time, "setTimeZone", tz.id)
 
                 val locale = Locale.getDefault()
-                val amPmTextId = when (locale.language) {
-                    "ja", "ko", "zh" -> {
-                        setViewVisibility(R.id.amPmTextBefore, View.VISIBLE)
-                        setViewVisibility(R.id.amPmTextAfter, View.GONE)
-                        R.id.amPmTextBefore
-                    }
+                val isSystemRtl = locale.layoutDirection == View.LAYOUT_DIRECTION_RTL
 
-                    else -> {
-                        setViewVisibility(R.id.amPmTextBefore, View.GONE)
-                        setViewVisibility(R.id.amPmTextAfter, View.VISIBLE)
-                        R.id.amPmTextAfter
-                    }
+                val layoutDirection = when (locale.language) {
+                    "ja", "ko", "zh" -> if (isSystemRtl) View.LAYOUT_DIRECTION_LTR else View.LAYOUT_DIRECTION_RTL
+                    else -> locale.layoutDirection
                 }
 
-                setString(amPmTextId, "setTimeZone", tz.id)
+                setInt(R.id.time_container, "setLayoutDirection", layoutDirection)
+
+                setString(R.id.amPmText, "setTimeZone", tz.id)
 
                 val isDayNightEnabled = prefs.getDayNightSwitch(widgetId)
                 val backgroundOpacity = prefs.getBackgroundOpacity(widgetId)
@@ -128,7 +124,7 @@ class DualClockAppWidget : AppWidgetProvider() {
                     setTextColor(R.id.place, color)
                     setTextColor(R.id.date, color)
                     setTextColor(R.id.time, color)
-                    setTextColor(amPmTextId, color)
+                    setTextColor(R.id.amPmText, color)
 
                     val backgroundRes =
                         if (isDayTime) R.drawable.bg_widget_clock_day
