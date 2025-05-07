@@ -15,7 +15,7 @@
     <string name="background_opacity_title">Background opacity</string>
     <string name="search_cities">City/country/region</string>
     <string name="widget_date_format">EEE, dd MMM</string>
-    <string name="widget_format_time_12">hh:mm</string>
+    <string name="widget_format_time_12">h:mm</string>
     <string name="widget_format_time_24">HH:mm</string>
 
     <string name="utc">UTC (Coordinated Universal Time)</string>
