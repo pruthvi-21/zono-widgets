@@ -88,8 +88,7 @@ class DualClockAppWidget : AppWidgetProvider() {
 
             return RemoteViews(context.packageName, layoutId).apply {
                 val cityName = cityTimeZone.getCityName(context)
-                val place = cityName.substringBefore("/")
-                setTextViewText(R.id.place, place)
+                setTextViewText(R.id.place, cityName)
 
                 val tz = ZoneId.of(cityTimeZone.timeZoneId)
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="blank" translatable="false"/>
     <string name="gmt" translatable="false">GMT%1$s</string>
 
     <string name="widget_format_time_12" translatable="false">h:mm</string>
