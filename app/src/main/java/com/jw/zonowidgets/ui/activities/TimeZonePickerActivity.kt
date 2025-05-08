@@ -58,6 +58,7 @@ import com.jw.zonowidgets.ui.theme.defaultShape
 import com.jw.zonowidgets.utils.EXTRA_SELECTED_ZONE_ID
 import com.jw.zonowidgets.utils.buildColoredString
 import com.jw.zonowidgets.utils.getCityName
+import com.jw.zonowidgets.utils.getCountryName
 import com.jw.zonowidgets.utils.readableOffset
 
 class TimeZonePickerActivity : ComponentActivity() {
@@ -170,12 +171,10 @@ class TimeZonePickerActivity : ComponentActivity() {
                     }
                     TileSetting(
                         title = {
-                            PreferenceTitleText(
-                                buildColoredString(
-                                    zone.getCityName(this@TimeZonePickerActivity),
-                                    query
-                                )
-                            )
+                            val city = zone.getCityName(this@TimeZonePickerActivity)
+                            val country = zone.getCountryName(this@TimeZonePickerActivity)
+                            val title = if(country.isNotEmpty()) "$city, $country" else city
+                            PreferenceTitleText(buildColoredString(title, query))
                         },
                         summary = {
                             Row(

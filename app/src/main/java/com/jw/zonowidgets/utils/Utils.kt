@@ -31,9 +31,9 @@ fun CityTimeZoneInfo.readableOffset(): String {
     return formattedOffset
 }
 
-fun CityTimeZoneInfo.getCityName(context: Context): String {
-    return context.getString(cityRes)
-}
+fun CityTimeZoneInfo.getCityName(context: Context) = context.getString(cityRes)
+
+fun CityTimeZoneInfo.getCountryName(context: Context) = context.getString(countryRes)
 
 @Composable
 fun buildColoredString(text: String, textToHighlight: String): AnnotatedString {
