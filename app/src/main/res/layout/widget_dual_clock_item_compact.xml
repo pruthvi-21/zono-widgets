@@ -12,8 +12,7 @@
     <FrameLayout
         android:id="@+id/background"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bg_widget_clock_left" />
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:id="@+id/content"
