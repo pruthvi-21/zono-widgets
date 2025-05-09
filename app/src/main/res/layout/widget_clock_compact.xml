@@ -13,7 +13,7 @@
         android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_widget_clock_night" />
+        android:background="@drawable/bg_widget_clock_left" />
 
     <LinearLayout
         android:id="@+id/content"
@@ -23,33 +23,12 @@
         android:orientation="horizontal"
         android:paddingHorizontal="10dp">
 
-        <LinearLayout
-            android:id="@+id/time_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="bottom"
-            android:orientation="horizontal">
-
-            <TextClock
-                android:id="@+id/time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:format12Hour="@string/widget_format_time_12"
-                android:format24Hour="@string/widget_format_time_24"
-                android:textColor="@android:color/white"
-                android:textSize="26sp" />
-
-            <TextClock
-                android:id="@+id/amPmText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:format12Hour="a"
-                android:format24Hour="a"
-                android:paddingStart="4dp"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                tools:ignore="RtlSymmetry" />
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="2dp"
+            android:contentDescription="@null" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -82,12 +61,32 @@
                 android:timeZone="Asia/Tokyo" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="2dp"
-            android:contentDescription="@null" />
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/time_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:orientation="horizontal">
 
+            <TextClock
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:format12Hour="@string/widget_format_time_12"
+                android:format24Hour="@string/widget_format_time_24"
+                android:textColor="@android:color/white"
+                android:textSize="26sp" />
+
+            <TextClock
+                android:id="@+id/amPmText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:format12Hour="a"
+                android:format24Hour="a"
+                android:paddingStart="4dp"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                tools:ignore="RtlSymmetry" />
+        </LinearLayout>
+    </LinearLayout>
 </FrameLayout>
