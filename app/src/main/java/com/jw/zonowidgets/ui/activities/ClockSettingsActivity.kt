@@ -129,7 +129,7 @@ class ClockSettingsActivity : ComponentActivity() {
                     viewModel.updateSecondTimeZone(selected)
                 }
 
-                DualClockAppWidget.refreshWidget(context, widgetId)
+                viewModel.refreshWidget(context, widgetId)
             }
 
         Column(modifier = modifier.fillMaxSize()) {
@@ -148,7 +148,7 @@ class ClockSettingsActivity : ComponentActivity() {
                         title = { PreferenceTitleText(stringResource(R.string.first_city)) },
                         summary = {
                             PreferenceSummaryText(
-                                text = stringResource(viewModel.firstTimeZoneInfo.cityRes),
+                                text = viewModel.getFirstCityName(this@ClockSettingsActivity),
                                 color = MaterialTheme.colorScheme.primary,
                             )
                         },
@@ -162,7 +162,7 @@ class ClockSettingsActivity : ComponentActivity() {
                         title = { PreferenceTitleText(stringResource(R.string.second_city)) },
                         summary = {
                             PreferenceSummaryText(
-                                text = stringResource(viewModel.secondTimeZoneInfo.cityRes),
+                                text = viewModel.getSecondCityName(this@ClockSettingsActivity),
                                 style = MaterialTheme.typography.preferenceSummaryStyle,
                                 color = MaterialTheme.colorScheme.primary,
                             )
@@ -212,7 +212,7 @@ class ClockSettingsActivity : ComponentActivity() {
                 onClick = {
                     viewModel.saveSettings()
 
-                    DualClockAppWidget.refreshWidget(this@ClockSettingsActivity, widgetId)
+                    viewModel.refreshWidget(this@ClockSettingsActivity, widgetId)
                     setResult(RESULT_OK, Intent().putExtra(EXTRA_APPWIDGET_ID, widgetId))
                     finish()
                 }

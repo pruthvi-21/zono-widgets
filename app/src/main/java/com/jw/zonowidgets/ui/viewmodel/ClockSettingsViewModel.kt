@@ -1,5 +1,7 @@
 package com.jw.zonowidgets.ui.viewmodel
 
+import android.appwidget.AppWidgetManager
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -8,7 +10,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.jw.zonowidgets.data.CityRepository
 import com.jw.zonowidgets.data.model.CityTimeZoneInfo
+import com.jw.zonowidgets.ui.widget.DualClockAppWidget
 import com.jw.zonowidgets.utils.WidgetPrefs
+import com.jw.zonowidgets.utils.getCityName
+import com.jw.zonowidgets.utils.getCountryName
 
 class ClockSettingsViewModel(
     private val widgetId: Int,
@@ -62,6 +67,36 @@ class ClockSettingsViewModel(
         return CityRepository.getCityById(savedId)
             ?: CityRepository.defaultCity.also {
             prefs.setCityIdAt(widgetId, position, it.id)
+        }
+    }
+
+    fun getFirstCityName(context: Context): String {
+        var cityName = firstTimeZoneInfo.getCityName(context)
+        val countryName = firstTimeZoneInfo.getCountryName(context)
+
+        if (countryName.isNotEmpty()) cityName += ", $countryName"
+
+        return cityName
+    }
+
+    fun getSecondCityName(context: Context): String {
+        var cityName = secondTimeZoneInfo.getCityName(context)
+        val countryName = secondTimeZoneInfo.getCountryName(context)
+
+        if (countryName.isNotEmpty()) cityName += ", $countryName"
+
+        return cityName
+    }
+
+    fun refreshWidget(context: Context, widgetId: Int) {
+        val manager = AppWidgetManager.getInstance(context)
+        val info = manager.getAppWidgetInfo(widgetId)
+        val providerClassName = info?.provider?.className
+
+        when (providerClassName) {
+            DualClockAppWidget::class.java.name -> {
+                DualClockAppWidget.refreshWidget(context, widgetId)
+            }
         }
     }
 }
