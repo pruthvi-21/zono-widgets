@@ -1,41 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="400dp"
-    android:layout_height="90dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:baselineAligned="false"
     android:gravity="center"
     android:orientation="horizontal">
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="@drawable/bg_widget_clock_day_left"
-        android:gravity="center"
-        android:orientation="horizontal"
+        android:layout_width="180dp"
+        android:layout_height="120dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_widget_clock_day"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
         android:paddingHorizontal="20dp">
 
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="4dp"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_sun_24dp" />
-
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical"
-            tools:ignore="NestedWeights">
+            android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables">
 
             <TextView
-                android:id="@+id/place"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:ellipsize="end"
                 android:gravity="start"
                 android:maxLines="1"
@@ -45,67 +36,79 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
-            <LinearLayout
-                android:id="@+id/time_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="bottom|center"
-                android:orientation="horizontal">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="4dp"
+                android:contentDescription="@null"
+                android:gravity="bottom"
+                android:src="@drawable/ic_sun_24dp" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="12:00"
-                    android:textColor="@color/text_color_day"
-                    android:textSize="26sp"
-                    tools:ignore="HardcodedText" />
+        <TextClock
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:format12Hour="@string/widget_date_format"
+            android:format24Hour="@string/widget_date_format"
+            android:gravity="center"
+            android:textColor="@color/text_color_day"
+            android:textSize="14sp"
+            android:timeZone="Asia/Tokyo" />
 
-                <TextView
-                    android:id="@+id/amPmText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:paddingStart="4dp"
-                    android:text="pm"
-                    android:textColor="@color/text_color_day"
-                    android:textSize="14sp"
-                    tools:ignore="HardcodedText,RtlSymmetry" />
-            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="Wed, 01 Jan"
+                android:text="12:00"
                 android:textColor="@color/text_color_day"
-                android:textSize="13sp"
+                android:textSize="32sp"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:paddingStart="4dp"
+                android:text="pm"
+                android:textColor="@color/text_color_day"
+                android:textSize="16sp"
+                tools:ignore="HardcodedText,RtlSymmetry" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|end"
+                android:text="🇺🇸"
+                android:textSize="22sp"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="@drawable/bg_widget_clock_night_right"
-        android:gravity="center"
-        android:orientation="horizontal"
+        android:layout_width="180dp"
+        android:layout_height="120dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_widget_clock_night"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
         android:paddingHorizontal="20dp">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical"
-            tools:ignore="NestedWeights">
+            android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:ellipsize="end"
                 android:gravity="start"
                 android:maxLines="1"
@@ -115,48 +118,56 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="bottom|center"
-                android:orientation="horizontal">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="4dp"
+                android:contentDescription="@null"
+                android:gravity="bottom"
+                android:src="@drawable/ic_moon_24dp" />
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2:00"
-                    android:textColor="@color/text_color_night"
-                    android:textSize="26sp"
-                    tools:ignore="HardcodedText" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Thu, 02 Jan"
+            android:textColor="@color/text_color_night"
+            android:textSize="14sp"
+            tools:ignore="HardcodedText" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:paddingStart="4dp"
-                    android:text="am"
-                    android:textColor="@color/text_color_night"
-                    android:textSize="14sp"
-                    tools:ignore="HardcodedText,RtlSymmetry" />
-            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="Thu, 02 Jan"
+                android:text="2:00"
                 android:textColor="@color/text_color_night"
-                android:textSize="13sp"
+                android:textSize="32sp"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:paddingStart="4dp"
+                android:text="am"
+                android:textColor="@color/text_color_night"
+                android:textSize="16sp"
+                tools:ignore="HardcodedText,RtlSymmetry" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|end"
+                android:text="🇯🇵"
+                android:textSize="22sp"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="4dp"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_moon_24dp" />
     </LinearLayout>
 
 </LinearLayout>

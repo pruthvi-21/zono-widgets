@@ -3,6 +3,7 @@
     <color name="text_color_day">#FF9C00</color>
     <color name="text_color_night">#C1C0FD</color>
 
-    <color name="background_color_day">#2E2E2E</color>
-    <color name="background_color_night">#222222</color>
+    <color name="widget_bg_color">#333333</color>
+    <color name="widget_bg_color_day">#2E2E2E</color>
+    <color name="widget_bg_color_night">#222222</color>
 </resources>

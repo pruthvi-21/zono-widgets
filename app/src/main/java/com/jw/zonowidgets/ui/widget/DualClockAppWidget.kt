@@ -15,6 +15,7 @@ import com.jw.zonowidgets.ui.activities.DualClockSettingsActivity
 import com.jw.zonowidgets.utils.WidgetPrefs
 import com.jw.zonowidgets.utils.WidgetUpdateScheduler
 import com.jw.zonowidgets.utils.getCityName
+import com.jw.zonowidgets.utils.getFlagEmoji
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.Locale
@@ -86,18 +87,16 @@ class DualClockAppWidget : AppWidgetProvider() {
             val tz = ZoneId.of(cityTimeZone.timeZoneId)
             val isDayTime = isDayTime(tz)
 
-            val layoutId = getLayoutId(context, widgetId)
-
-            return RemoteViews(context.packageName, layoutId).apply {
+            return RemoteViews(context.packageName, getLayoutId()).apply {
                 setTextViewText(R.id.place, cityTimeZone.getCityName(context))
 
                 setString(R.id.date, "setTimeZone", tz.id)
                 setString(R.id.time, "setTimeZone", tz.id)
                 setString(R.id.amPmText, "setTimeZone", tz.id)
 
-                setLayoutDirections(this, position)
-                setForeground(this, context, isDayNightEnabled, isDayTime)
-                setBackground(this, isDayNightEnabled, isDayTime, backgroundOpacity, position)
+                setLayoutDirections(this)
+                setForeground(this, context, isDayNightEnabled, isDayTime, cityTimeZone.isoCode)
+                setBackground(this, isDayNightEnabled, isDayTime, backgroundOpacity)
             }
         }
 
@@ -106,6 +105,7 @@ class DualClockAppWidget : AppWidgetProvider() {
             context: Context,
             isDayNightEnabled: Boolean,
             isDayTime: Boolean,
+            isoCode: String,
         ) {
             if (isDayNightEnabled) {
                 val color = if (isDayTime) context.getColor(R.color.text_color_day)
@@ -119,6 +119,8 @@ class DualClockAppWidget : AppWidgetProvider() {
 
             val iconRes = if (isDayTime) R.drawable.ic_sun_24dp else R.drawable.ic_moon_24dp
             remoteViews.setImageViewResource(R.id.icon, iconRes)
+
+            remoteViews.setTextViewText(R.id.flag_view, getFlagEmoji(isoCode))
         }
 
         private fun isDayTime(tz: ZoneId): Boolean {
@@ -126,15 +128,10 @@ class DualClockAppWidget : AppWidgetProvider() {
             return hour in 6..17
         }
 
-        private fun getLayoutId(context: Context, widgetId: Int): Int {
-            val minHeight = AppWidgetManager.getInstance(context)
-                .getAppWidgetOptions(widgetId)
-                .getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
-            return if (minHeight in 1 until 100) R.layout.widget_dual_clock_item_compact else R.layout.widget_dual_clock_item
-        }
+        private fun getLayoutId() = R.layout.widget_dual_clock_item
 
         // Adjusts layout direction for proper language and AM/PM placement
-        private fun setLayoutDirections(remoteViews: RemoteViews, position: Int) {
+        private fun setLayoutDirections(remoteViews: RemoteViews) {
             val locale = Locale.getDefault()
             val isSystemRtl = locale.layoutDirection == View.LAYOUT_DIRECTION_RTL
 
@@ -144,16 +141,6 @@ class DualClockAppWidget : AppWidgetProvider() {
             } else locale.layoutDirection
 
             remoteViews.setInt(R.id.time_container, "setLayoutDirection", timeLayoutDirection)
-
-            // Special case: reverse root layout for position 2 in RTL mode
-            // Instead of duplicating the code for 2nd city we are using the same
-            // layout and inverting the layout to match with the design
-            if (position == 2) {
-                val rootDirection = if (isSystemRtl) View.LAYOUT_DIRECTION_LTR
-                else View.LAYOUT_DIRECTION_RTL
-
-                remoteViews.setInt(R.id.root, "setLayoutDirection", rootDirection)
-            }
         }
 
         private fun setBackground(
@@ -161,26 +148,14 @@ class DualClockAppWidget : AppWidgetProvider() {
             isDayNightEnabled: Boolean,
             isDayTime: Boolean,
             backgroundOpacity: Float,
-            position: Int,
         ) {
-            val isSystemRtl = Locale.getDefault().layoutDirection == View.LAYOUT_DIRECTION_RTL
-
-            val isLeft = (position == 1 && !isSystemRtl) || (position != 1 && isSystemRtl)
-            val time = if (!isDayNightEnabled) "base" else if (isDayTime) "day" else "night"
-            val side = if (isLeft) "left" else "right"
-
-            val backgroundRes = when ("$time-$side") {
-                "base-left" -> R.drawable.bg_widget_clock_left
-                "base-right" -> R.drawable.bg_widget_clock_right
-                "day-left" -> R.drawable.bg_widget_clock_day_left
-                "day-right" -> R.drawable.bg_widget_clock_day_right
-                "night-left" -> R.drawable.bg_widget_clock_night_left
-                "night-right" -> R.drawable.bg_widget_clock_night_right
-                else -> R.drawable.bg_widget_clock_left // fallback
+            if (isDayNightEnabled) {
+                val res = if (isDayTime) R.drawable.bg_widget_clock_day
+                else R.drawable.bg_widget_clock_night
+                remoteViews.setInt(R.id.background, "setBackgroundResource", res)
             }
 
             remoteViews.setFloat(R.id.background, "setAlpha", backgroundOpacity)
-            remoteViews.setInt(R.id.background, "setBackgroundResource", backgroundRes)
         }
     }
 }

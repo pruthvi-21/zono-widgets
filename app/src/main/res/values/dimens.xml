@@ -2,4 +2,5 @@
 <resources>
     <dimen name="toolbar_top_margin">12dp</dimen>
     <dimen name="background_radius">1000dp</dimen>
+    <dimen name="widget_radius">22dp</dimen>
 </resources>
