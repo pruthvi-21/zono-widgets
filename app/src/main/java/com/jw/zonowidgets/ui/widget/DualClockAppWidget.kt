@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.text.layoutDirection
@@ -51,6 +52,9 @@ class DualClockAppWidget : AppWidgetProvider() {
         // Languages where AM/PM modifier appears before the time (e.g., "午前 10:30")
         private val LANGUAGES_WITH_LEADING_AMPM = setOf("ja", "ko", "zh")
 
+        private const val FLAG_HIDDEN_THRESHOLD = 313
+        private const val SMALL_WIDTH_THRESHOLD = 343
+
         fun refreshWidget(context: Context, widgetId: Int) {
             val views = RemoteViews(context.packageName, R.layout.widget_dual_clock).apply {
                 removeAllViews(R.id.root)
@@ -87,7 +91,9 @@ class DualClockAppWidget : AppWidgetProvider() {
             val tz = ZoneId.of(cityTimeZone.timeZoneId)
             val isDayTime = isDayTime(tz)
 
-            return RemoteViews(context.packageName, getLayoutId()).apply {
+            val widgetWidth = getWidgetWidth(context, widgetId)
+
+            return RemoteViews(context.packageName, getLayoutId(context, widgetId)).apply {
                 setTextViewText(R.id.place, cityTimeZone.getCityName(context))
 
                 setString(R.id.date, "setTimeZone", tz.id)
@@ -95,7 +101,14 @@ class DualClockAppWidget : AppWidgetProvider() {
                 setString(R.id.amPmText, "setTimeZone", tz.id)
 
                 setLayoutDirections(this)
-                setForeground(this, context, isDayNightEnabled, isDayTime, cityTimeZone.isoCode)
+                setForeground(
+                    this,
+                    context,
+                    isDayNightEnabled,
+                    isDayTime,
+                    cityTimeZone.isoCode,
+                    widgetWidth
+                )
                 setBackground(this, isDayNightEnabled, isDayTime, backgroundOpacity)
             }
         }
@@ -106,6 +119,7 @@ class DualClockAppWidget : AppWidgetProvider() {
             isDayNightEnabled: Boolean,
             isDayTime: Boolean,
             isoCode: String,
+            widgetWidth: Int,
         ) {
             if (isDayNightEnabled) {
                 val color = if (isDayTime) context.getColor(R.color.text_color_day)
@@ -121,6 +135,25 @@ class DualClockAppWidget : AppWidgetProvider() {
             remoteViews.setImageViewResource(R.id.icon, iconRes)
 
             remoteViews.setTextViewText(R.id.flag_view, getFlagEmoji(isoCode))
+
+            when {
+                widgetWidth <= FLAG_HIDDEN_THRESHOLD -> {
+                    remoteViews.setViewVisibility(R.id.flag_view, View.GONE)
+                    remoteViews.setTextViewTextSize(R.id.time, TypedValue.COMPLEX_UNIT_SP, 24f)
+                }
+
+                widgetWidth <= SMALL_WIDTH_THRESHOLD -> {
+                    remoteViews.setViewVisibility(R.id.flag_view, View.VISIBLE)
+                    remoteViews.setTextViewTextSize(R.id.time, TypedValue.COMPLEX_UNIT_SP, 28f)
+                    remoteViews.setTextViewTextSize(R.id.flag_view, TypedValue.COMPLEX_UNIT_SP, 18f)
+                }
+
+                else -> {
+                    remoteViews.setViewVisibility(R.id.flag_view, View.VISIBLE)
+                    remoteViews.setTextViewTextSize(R.id.time, TypedValue.COMPLEX_UNIT_SP, 32f)
+                    remoteViews.setTextViewTextSize(R.id.flag_view, TypedValue.COMPLEX_UNIT_SP, 24f)
+                }
+            }
         }
 
         private fun isDayTime(tz: ZoneId): Boolean {
@@ -128,7 +161,20 @@ class DualClockAppWidget : AppWidgetProvider() {
             return hour in 6..17
         }
 
-        private fun getLayoutId() = R.layout.widget_dual_clock_item
+        private fun getLayoutId(context: Context, widgetId: Int): Int {
+            val options = AppWidgetManager.getInstance(context)
+                .getAppWidgetOptions(widgetId)
+            val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
+
+            if (minHeight < 80) return R.layout.widget_dual_clock_item_compact
+            return R.layout.widget_dual_clock_item
+        }
+
+        private fun getWidgetWidth(context: Context, widgetId: Int): Int {
+            val options = AppWidgetManager.getInstance(context).getAppWidgetOptions(widgetId)
+            val minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
+            return minWidth
+        }
 
         // Adjusts layout direction for proper language and AM/PM placement
         private fun setLayoutDirections(remoteViews: RemoteViews) {
