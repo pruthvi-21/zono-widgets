@@ -11,7 +11,7 @@ import android.widget.RemoteViews
 import androidx.core.text.layoutDirection
 import com.jw.zonowidgets.R
 import com.jw.zonowidgets.data.CityRepository
-import com.jw.zonowidgets.ui.activities.ClockSettingsActivity
+import com.jw.zonowidgets.ui.activities.DualClockSettingsActivity
 import com.jw.zonowidgets.utils.WidgetPrefs
 import com.jw.zonowidgets.utils.WidgetUpdateScheduler
 import com.jw.zonowidgets.utils.getCityName
@@ -58,7 +58,7 @@ class DualClockAppWidget : AppWidgetProvider() {
                 addView(R.id.root, buildRemoteView(context, widgetId, 2))
             }
 
-            val configIntent = Intent(context, ClockSettingsActivity::class.java).apply {
+            val configIntent = Intent(context, DualClockSettingsActivity::class.java).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
             }
 
