@@ -42,6 +42,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -137,10 +138,19 @@ class TimeZonePickerActivity : ComponentActivity() {
 
     @Composable
     private fun MyContent(modifier: Modifier, query: String) {
+        val context = LocalContext.current
         val grouped = remember(query) {
-            CityRepository.getAllCities(filterQuery = query)
-                .sortedBy { it.getCityName(this) }
-                .groupBy { it.getCityName(this).first() }
+            if (query.isEmpty()) {
+                CityRepository.getAllCities()
+                    .sortedBy { it.getCityName(context) }
+                    .groupBy { it.getCityName(context).first() }
+            } else {
+                val filtered = CityRepository.getFilteredCities(
+                    context = context,
+                    filterQuery = query
+                )
+                mapOf(context.getString(R.string.search_result) to filtered)
+            }
         }
         val cardShape = defaultShape
 

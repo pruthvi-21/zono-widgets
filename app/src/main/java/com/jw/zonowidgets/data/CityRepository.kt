@@ -1,8 +1,11 @@
 package com.jw.zonowidgets.data
 
+import android.content.Context
 import android.icu.util.TimeZone
 import com.jw.zonowidgets.R
 import com.jw.zonowidgets.data.model.CityTimeZoneInfo
+import com.jw.zonowidgets.utils.getCityName
+import com.jw.zonowidgets.utils.getCountryName
 
 object CityRepository {
 
@@ -407,20 +410,37 @@ object CityRepository {
     )
     // @formatter:on
 
-    fun getAllCities(filterQuery: String = ""): List<CityTimeZoneInfo> {
+    fun getAllCities() = cities
+
+    fun getFilteredCities(
+        context: Context,
+        filterQuery: String = "",
+    ): List<CityTimeZoneInfo> {
         if (filterQuery.isBlank()) return cities
 
         val normalizedQuery = filterQuery.trim().lowercase()
 
-        return cities.filter { city ->
+        val titleMatchList = mutableListOf<CityTimeZoneInfo>()
+        val otherMatchList = mutableListOf<CityTimeZoneInfo>()
+
+        cities.forEach { city ->
             val id = city.id.lowercase()
+            val cityName = city.getCityName(context).lowercase()
+            val countryName = city.getCountryName(context).lowercase()
             val zone = city.timeZoneId.lowercase()
             val parts = city.id.replace("__", " ").replace("_", " ")
 
-            id.contains(normalizedQuery) ||
-                    zone.contains(normalizedQuery) ||
-                    parts.contains(normalizedQuery)
+            if (cityName.contains(normalizedQuery) || countryName.contains(normalizedQuery)) {
+                titleMatchList.add(city)
+            } else if (id.contains(normalizedQuery) ||
+                zone.contains(normalizedQuery) ||
+                parts.contains(normalizedQuery)
+            ) {
+                otherMatchList.add(city)
+            }
         }
+
+        return (titleMatchList + otherMatchList)
     }
 
     fun getCityById(id: String?): CityTimeZoneInfo? = cities.find { it.id == id }

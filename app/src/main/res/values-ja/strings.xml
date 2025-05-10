@@ -11,6 +11,7 @@
     <string name="save">保存</string>
     <string name="unable_to_open_settings">設定を開くことができません</string>
     <string name="select_your_city">あなたの街を選択してください</string>
+    <string name="search_result">検索結果</string>
     <string name="navigate_up">ナビゲートします</string>
     <string name="background_opacity_title">背景の不透明度</string>
     <string name="search_cities">市/国/地域</string>
