@@ -12,8 +12,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,7 +23,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -29,6 +30,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -38,6 +40,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.jw.zonowidgets.R
 import com.jw.zonowidgets.data.CityRepository
 import com.jw.zonowidgets.ui.components.PreferenceSummaryText
@@ -59,6 +62,10 @@ class DualClockSettingsActivity : ComponentActivity() {
     private val prefs by lazy { WidgetPrefs(this) }
 
     private var widgetId: Int = INVALID_APPWIDGET_ID
+
+    private val viewModel by viewModels<ClockSettingsViewModel> {
+        ClockSettingsViewModelFactory(widgetId, prefs)
+    }
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,7 +93,10 @@ class DualClockSettingsActivity : ComponentActivity() {
                                 )
                             },
                             navigationIcon = {
-                                IconButton(onClick = { finish() }) {
+                                IconButton(onClick = {
+                                    setResult(RESULT_CANCELED)
+                                    finish()
+                                }) {
                                     Icon(
                                         painter = painterResource(R.drawable.ic_chevron_left),
                                         contentDescription = stringResource(R.string.navigate_up),
@@ -97,6 +107,49 @@ class DualClockSettingsActivity : ComponentActivity() {
                             modifier = Modifier.padding(top = dimensionResource(R.dimen.toolbar_top_margin)),
                             windowInsets = WindowInsets.safeDrawing,
                         )
+                    },
+                    bottomBar = {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 20.dp)
+                                .padding(bottom = 5.dp),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            TextButton(
+                                modifier = Modifier
+                                    .weight(1f),
+                                contentPadding = PaddingValues(15.dp),
+                                shape = defaultShape,
+                                onClick = {
+                                    setResult(RESULT_CANCELED)
+                                    finish()
+                                }
+                            ) {
+                                Text(text = stringResource(R.string.cancel), fontSize = 18.sp)
+                            }
+
+                            TextButton(
+                                modifier = Modifier
+                                    .weight(1f),
+                                contentPadding = PaddingValues(15.dp),
+                                shape = defaultShape,
+                                onClick = {
+                                    viewModel.saveSettings()
+                                    viewModel.refreshWidget(
+                                        this@DualClockSettingsActivity,
+                                        widgetId
+                                    )
+                                    setResult(
+                                        RESULT_OK,
+                                        Intent().putExtra(EXTRA_APPWIDGET_ID, widgetId)
+                                    )
+                                    finish()
+                                }
+                            ) {
+                                Text(text = stringResource(R.string.save), fontSize = 18.sp)
+                            }
+                        }
                     }
                 ) { innerPadding ->
                     MyContent(modifier = Modifier.padding(innerPadding))
@@ -108,10 +161,6 @@ class DualClockSettingsActivity : ComponentActivity() {
     @Composable
     private fun MyContent(modifier: Modifier) {
         val context = LocalContext.current
-
-        val viewModel by viewModels<ClockSettingsViewModel> {
-            ClockSettingsViewModelFactory(widgetId, prefs)
-        }
 
         val launcher =
             rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -131,92 +180,71 @@ class DualClockSettingsActivity : ComponentActivity() {
                 viewModel.refreshWidget(context, widgetId)
             }
 
-        Column(modifier = modifier.fillMaxSize()) {
+        Column(modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())) {
             Column(
                 modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 12.dp)
+                    .clip(defaultShape)
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
             ) {
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = 12.dp)
-                        .clip(defaultShape)
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
-                ) {
-                    TileSetting(
-                        title = { PreferenceTitleText(stringResource(R.string.first_city)) },
-                        summary = {
-                            PreferenceSummaryText(
-                                text = viewModel.getFirstCityName(this@DualClockSettingsActivity),
-                                color = MaterialTheme.colorScheme.primary,
-                            )
-                        },
-                        onClick = {
-                            viewModel.setTimezoneBeingEdited(1)
-                            launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
-                        }
-                    )
-                    HorizontalDivider(Modifier.padding(horizontal = 20.dp))
-                    TileSetting(
-                        title = { PreferenceTitleText(stringResource(R.string.second_city)) },
-                        summary = {
-                            PreferenceSummaryText(
-                                text = viewModel.getSecondCityName(this@DualClockSettingsActivity),
-                                style = MaterialTheme.typography.preferenceSummaryStyle,
-                                color = MaterialTheme.colorScheme.primary,
-                            )
-                        },
-                        onClick = {
-                            viewModel.setTimezoneBeingEdited(2)
-                            launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
-                        }
-                    )
-                }
-
-                SubHeading(
-                    label = stringResource(R.string.additional_configuration),
-                    icon = painterResource(R.drawable.ic_settings_24dp),
-                    modifier = Modifier
-                        .padding(top = 15.dp)
-                        .padding(horizontal = 12.dp),
+                TileSetting(
+                    title = { PreferenceTitleText(stringResource(R.string.first_city)) },
+                    summary = {
+                        PreferenceSummaryText(
+                            text = viewModel.getFirstCityName(this@DualClockSettingsActivity),
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                    },
+                    onClick = {
+                        viewModel.setTimezoneBeingEdited(1)
+                        launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
+                    }
                 )
-
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = 12.dp)
-                        .clip(defaultShape)
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
-                ) {
-                    SwitchSetting(
-                        title = stringResource(R.string.day_night_switch_title),
-                        summary = stringResource(R.string.day_night_switch_description),
-                        checked = viewModel.isDayNightModeEnabled,
-                        onClick = { viewModel.toggleDayNight() },
-                    )
-                    HorizontalDivider(Modifier.padding(horizontal = 20.dp))
-                    SliderSetting(
-                        title = stringResource(R.string.background_opacity_title),
-                        value = viewModel.opacityValue,
-                        onValueChange = { viewModel.updateOpacity(it) },
-                    )
-                }
+                HorizontalDivider(Modifier.padding(horizontal = 20.dp))
+                TileSetting(
+                    title = { PreferenceTitleText(stringResource(R.string.second_city)) },
+                    summary = {
+                        PreferenceSummaryText(
+                            text = viewModel.getSecondCityName(this@DualClockSettingsActivity),
+                            style = MaterialTheme.typography.preferenceSummaryStyle,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                    },
+                    onClick = {
+                        viewModel.setTimezoneBeingEdited(2)
+                        launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
+                    }
+                )
             }
 
-            Button(
+            SubHeading(
+                label = stringResource(R.string.additional_configuration),
+                icon = painterResource(R.drawable.ic_settings_24dp),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 16.dp),
-                contentPadding = PaddingValues(15.dp),
-                shape = defaultShape,
-                onClick = {
-                    viewModel.saveSettings()
+                    .padding(top = 15.dp)
+                    .padding(horizontal = 12.dp),
+            )
 
-                    viewModel.refreshWidget(this@DualClockSettingsActivity, widgetId)
-                    setResult(RESULT_OK, Intent().putExtra(EXTRA_APPWIDGET_ID, widgetId))
-                    finish()
-                }
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 12.dp)
+                    .clip(defaultShape)
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
             ) {
-                Text(text = stringResource(R.string.save))
+                SwitchSetting(
+                    title = stringResource(R.string.day_night_switch_title),
+                    summary = stringResource(R.string.day_night_switch_description),
+                    checked = viewModel.isDayNightModeEnabled,
+                    onClick = { viewModel.toggleDayNight() },
+                )
+                HorizontalDivider(Modifier.padding(horizontal = 20.dp))
+                SliderSetting(
+                    title = stringResource(R.string.background_opacity_title),
+                    value = viewModel.opacityValue,
+                    onValueChange = { viewModel.updateOpacity(it) },
+                )
             }
         }
     }
