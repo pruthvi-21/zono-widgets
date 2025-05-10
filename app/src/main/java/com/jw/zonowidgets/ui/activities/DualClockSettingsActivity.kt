@@ -51,11 +51,10 @@ import com.jw.zonowidgets.ui.theme.defaultShape
 import com.jw.zonowidgets.ui.theme.preferenceSummaryStyle
 import com.jw.zonowidgets.ui.viewmodel.ClockSettingsViewModel
 import com.jw.zonowidgets.ui.viewmodel.ClockSettingsViewModelFactory
-import com.jw.zonowidgets.ui.widget.DualClockAppWidget
 import com.jw.zonowidgets.utils.EXTRA_SELECTED_ZONE_ID
 import com.jw.zonowidgets.utils.WidgetPrefs
 
-class ClockSettingsActivity : ComponentActivity() {
+class DualClockSettingsActivity : ComponentActivity() {
 
     private val prefs by lazy { WidgetPrefs(this) }
 
@@ -148,7 +147,7 @@ class ClockSettingsActivity : ComponentActivity() {
                         title = { PreferenceTitleText(stringResource(R.string.first_city)) },
                         summary = {
                             PreferenceSummaryText(
-                                text = viewModel.getFirstCityName(this@ClockSettingsActivity),
+                                text = viewModel.getFirstCityName(this@DualClockSettingsActivity),
                                 color = MaterialTheme.colorScheme.primary,
                             )
                         },
@@ -162,7 +161,7 @@ class ClockSettingsActivity : ComponentActivity() {
                         title = { PreferenceTitleText(stringResource(R.string.second_city)) },
                         summary = {
                             PreferenceSummaryText(
-                                text = viewModel.getSecondCityName(this@ClockSettingsActivity),
+                                text = viewModel.getSecondCityName(this@DualClockSettingsActivity),
                                 style = MaterialTheme.typography.preferenceSummaryStyle,
                                 color = MaterialTheme.colorScheme.primary,
                             )
@@ -212,7 +211,7 @@ class ClockSettingsActivity : ComponentActivity() {
                 onClick = {
                     viewModel.saveSettings()
 
-                    viewModel.refreshWidget(this@ClockSettingsActivity, widgetId)
+                    viewModel.refreshWidget(this@DualClockSettingsActivity, widgetId)
                     setResult(RESULT_OK, Intent().putExtra(EXTRA_APPWIDGET_ID, widgetId))
                     finish()
                 }

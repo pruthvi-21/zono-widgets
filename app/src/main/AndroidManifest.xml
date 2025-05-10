@@ -27,7 +27,7 @@
         </receiver>
 
         <activity
-            android:name=".ui.activities.ClockSettingsActivity"
+            android:name=".ui.activities.DualClockSettingsActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
