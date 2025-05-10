@@ -23,7 +23,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/clock_widget_info" />
+                android:resource="@xml/info_dual_clock_widget" />
         </receiver>
 
         <activity

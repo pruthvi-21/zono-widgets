@@ -130,7 +130,7 @@ class DualClockAppWidget : AppWidgetProvider() {
             val minHeight = AppWidgetManager.getInstance(context)
                 .getAppWidgetOptions(widgetId)
                 .getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
-            return if (minHeight in 1 until 100) R.layout.widget_clock_compact else R.layout.widget_clock
+            return if (minHeight in 1 until 100) R.layout.widget_dual_clock_item_compact else R.layout.widget_dual_clock_item
         }
 
         // Adjusts layout direction for proper language and AM/PM placement
