@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="text_color_day">#FF9C00</color>
-    <color name="text_color_night">#C1C0FD</color>
+    <color name="widget_text_color">#FFFFFF</color>
+    <color name="widget_text_color_day">#FF9C00</color>
+    <color name="widget_text_color_night">#C1C0FD</color>
 
-    <color name="widget_bg_color">#333333</color>
+    <color name="widget_bg_color">#222222</color>
     <color name="widget_bg_color_day">#2E2E2E</color>
     <color name="widget_bg_color_night">#222222</color>
 </resources>

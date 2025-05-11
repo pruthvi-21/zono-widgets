@@ -14,7 +14,7 @@
         android:theme="@style/Theme.ZonoWidgets">
 
         <receiver
-            android:name=".ui.widget.DualClockAppWidget"
+            android:name=".ui.widget.providers.DualClockAppWidget"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

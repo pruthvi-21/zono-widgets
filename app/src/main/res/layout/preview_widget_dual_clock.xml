@@ -5,11 +5,12 @@
     android:layout_height="wrap_content"
     android:baselineAligned="false"
     android:gravity="center"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    tools:ignore="PxUsage">
 
     <LinearLayout
-        android:layout_width="180dp"
-        android:layout_height="120dp"
+        android:layout_width="600px"
+        android:layout_height="370px"
         android:layout_margin="5dp"
         android:background="@drawable/bg_widget_clock_day"
         android:gravity="center_vertical"
@@ -31,9 +32,9 @@
                 android:gravity="start"
                 android:maxLines="1"
                 android:text="@string/city_us__new_york"
-                android:textColor="@color/text_color_day"
+                android:textColor="@color/widget_text_color_day"
                 android:textDirection="locale"
-                android:textSize="14sp"
+                android:textSize="50px"
                 android:textStyle="bold" />
 
             <ImageView
@@ -51,8 +52,8 @@
             android:format12Hour="@string/widget_date_format"
             android:format24Hour="@string/widget_date_format"
             android:gravity="center"
-            android:textColor="@color/text_color_day"
-            android:textSize="14sp"
+            android:textColor="@color/widget_text_color_day"
+            android:textSize="50px"
             android:timeZone="Asia/Tokyo" />
 
         <LinearLayout
@@ -64,8 +65,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="12:00"
-                android:textColor="@color/text_color_day"
-                android:textSize="32sp"
+                android:textColor="@color/widget_text_color_day"
+                android:textSize="110px"
                 tools:ignore="HardcodedText" />
 
             <TextView
@@ -74,8 +75,8 @@
                 android:gravity="bottom"
                 android:paddingStart="4dp"
                 android:text="pm"
-                android:textColor="@color/text_color_day"
-                android:textSize="16sp"
+                android:textColor="@color/widget_text_color_day"
+                android:textSize="50px"
                 tools:ignore="HardcodedText,RtlSymmetry" />
 
             <TextView
@@ -84,19 +85,19 @@
                 android:layout_weight="1"
                 android:gravity="center|end"
                 android:text="🇺🇸"
-                android:textSize="22sp"
+                android:textSize="63px"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="180dp"
-        android:layout_height="120dp"
+        android:layout_width="600px"
+        android:layout_height="370px"
         android:layout_margin="5dp"
         android:background="@drawable/bg_widget_clock_night"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingHorizontal="20dp">
+        android:paddingHorizontal="66px">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -113,9 +114,9 @@
                 android:gravity="start"
                 android:maxLines="1"
                 android:text="@string/city_jp__tokyo"
-                android:textColor="@color/text_color_night"
+                android:textColor="@color/widget_text_color_night"
                 android:textDirection="locale"
-                android:textSize="14sp"
+                android:textSize="50px"
                 android:textStyle="bold" />
 
             <ImageView
@@ -132,8 +133,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Thu, 02 Jan"
-            android:textColor="@color/text_color_night"
-            android:textSize="14sp"
+            android:textColor="@color/widget_text_color_night"
+            android:textSize="50px"
             tools:ignore="HardcodedText" />
 
         <LinearLayout
@@ -145,8 +146,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2:00"
-                android:textColor="@color/text_color_night"
-                android:textSize="32sp"
+                android:textColor="@color/widget_text_color_night"
+                android:textSize="110px"
                 tools:ignore="HardcodedText" />
 
             <TextView
@@ -155,8 +156,8 @@
                 android:gravity="bottom"
                 android:paddingStart="4dp"
                 android:text="am"
-                android:textColor="@color/text_color_night"
-                android:textSize="16sp"
+                android:textColor="@color/widget_text_color_night"
+                android:textSize="50px"
                 tools:ignore="HardcodedText,RtlSymmetry" />
 
             <TextView
@@ -165,7 +166,7 @@
                 android:layout_weight="1"
                 android:gravity="center|end"
                 android:text="🇯🇵"
-                android:textSize="22sp"
+                android:textSize="63px"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
     </LinearLayout>

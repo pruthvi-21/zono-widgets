@@ -14,7 +14,7 @@
         android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_widget_clock_night" />
+        android:background="@drawable/bg_widget_clock" />
 
     <LinearLayout
         android:id="@+id/content"
@@ -38,22 +38,21 @@
                 android:format12Hour="@string/widget_format_time_12"
                 android:format24Hour="@string/widget_format_time_24"
                 android:maxLines="1"
-                android:textColor="@android:color/white"
-                android:textSize="26sp"
-                tools:textColor="@color/text_color_night" />
+                android:textColor="@color/widget_text_color"
+                android:textSize="@dimen/widget_time_font_size_compact"
+                tools:textColor="@color/widget_text_color_night" />
 
             <TextClock
                 android:id="@+id/amPmText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
                 android:format12Hour="a"
                 android:format24Hour=""
                 android:maxLines="1"
-                android:paddingStart="4dp"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                tools:ignore="RtlSymmetry"
-                tools:textColor="@color/text_color_night" />
+                android:textColor="@color/widget_text_color"
+                android:textSize="@dimen/widget_ampm_font_size_compact"
+                tools:textColor="@color/widget_text_color_night" />
         </LinearLayout>
 
         <LinearLayout
@@ -70,11 +69,11 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@android:color/white"
-                android:textSize="13sp"
+                android:textColor="@color/widget_text_color"
+                android:textSize="@dimen/widget_place_font_size_compact"
                 android:textStyle="bold"
                 tools:text="Seoul"
-                tools:textColor="@color/text_color_night" />
+                tools:textColor="@color/widget_text_color_night" />
 
             <TextClock
                 android:id="@+id/date"
@@ -84,16 +83,15 @@
                 android:format24Hour="@string/widget_date_format"
                 android:gravity="center"
                 android:maxLines="1"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
-                android:timeZone="Asia/Tokyo"
-                tools:textColor="@color/text_color_night" />
+                android:textColor="@color/widget_text_color"
+                android:textSize="@dimen/widget_date_font_size_compact"
+                tools:textColor="@color/widget_text_color_night" />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/day_night_icon_size_compact"
+            android:layout_height="@dimen/day_night_icon_size_compact"
             android:layout_marginStart="2dp"
             android:contentDescription="@null"
             tools:src="@drawable/ic_moon_24dp" />

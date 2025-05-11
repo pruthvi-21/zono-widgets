@@ -42,7 +42,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jw.zonowidgets.R
-import com.jw.zonowidgets.data.CityRepository
 import com.jw.zonowidgets.ui.components.PreferenceSummaryText
 import com.jw.zonowidgets.ui.components.PreferenceTitleText
 import com.jw.zonowidgets.ui.components.SliderSetting
@@ -52,8 +51,10 @@ import com.jw.zonowidgets.ui.components.TileSetting
 import com.jw.zonowidgets.ui.theme.ZonoWidgetsTheme
 import com.jw.zonowidgets.ui.theme.defaultShape
 import com.jw.zonowidgets.ui.theme.preferenceSummaryStyle
-import com.jw.zonowidgets.ui.viewmodel.ClockSettingsViewModel
-import com.jw.zonowidgets.ui.viewmodel.ClockSettingsViewModelFactory
+import com.jw.zonowidgets.ui.viewmodel.DualClockSettingsViewModel
+import com.jw.zonowidgets.ui.viewmodel.DualClockSettingsViewModel.Companion.FIRST_CLOCK
+import com.jw.zonowidgets.ui.viewmodel.DualClockSettingsViewModel.Companion.SECOND_CLOCK
+import com.jw.zonowidgets.ui.viewmodel.DualClockSettingsViewModelFactory
 import com.jw.zonowidgets.utils.EXTRA_SELECTED_ZONE_ID
 import com.jw.zonowidgets.utils.WidgetPrefs
 
@@ -63,11 +64,10 @@ class DualClockSettingsActivity : ComponentActivity() {
 
     private var widgetId: Int = INVALID_APPWIDGET_ID
 
-    private val viewModel by viewModels<ClockSettingsViewModel> {
-        ClockSettingsViewModelFactory(widgetId, prefs)
+    private val viewModel by viewModels<DualClockSettingsViewModel> {
+        DualClockSettingsViewModelFactory(widgetId, prefs)
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -85,71 +85,32 @@ class DualClockSettingsActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     contentWindowInsets = WindowInsets.safeDrawing,
                     topBar = {
-                        TopAppBar(
-                            title = {
-                                Text(
-                                    text = stringResource(R.string.clock_settings),
-                                    color = MaterialTheme.colorScheme.primary
-                                )
-                            },
-                            navigationIcon = {
-                                IconButton(onClick = {
-                                    setResult(RESULT_CANCELED)
-                                    finish()
-                                }) {
-                                    Icon(
-                                        painter = painterResource(R.drawable.ic_chevron_left),
-                                        contentDescription = stringResource(R.string.navigate_up),
-                                        tint = MaterialTheme.colorScheme.primary
-                                    )
-                                }
-                            },
-                            modifier = Modifier.padding(top = dimensionResource(R.dimen.toolbar_top_margin)),
-                            windowInsets = WindowInsets.safeDrawing,
+                        TopBar(
+                            onNavigationIconClick = {
+                                setResult(RESULT_CANCELED)
+                                finish()
+                            }
                         )
                     },
                     bottomBar = {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 20.dp)
-                                .padding(bottom = 5.dp),
-                            horizontalArrangement = Arrangement.spacedBy(16.dp)
-                        ) {
-                            TextButton(
-                                modifier = Modifier
-                                    .weight(1f),
-                                contentPadding = PaddingValues(15.dp),
-                                shape = defaultShape,
-                                onClick = {
-                                    setResult(RESULT_CANCELED)
-                                    finish()
-                                }
-                            ) {
-                                Text(text = stringResource(R.string.cancel), fontSize = 18.sp)
+                        BottomBar(
+                            onCancel = {
+                                setResult(RESULT_CANCELED)
+                                finish()
+                            },
+                            onSave = {
+                                viewModel.saveSettings()
+                                viewModel.refreshWidget(
+                                    this@DualClockSettingsActivity,
+                                    widgetId
+                                )
+                                setResult(
+                                    RESULT_OK,
+                                    Intent().putExtra(EXTRA_APPWIDGET_ID, widgetId)
+                                )
+                                finish()
                             }
-
-                            TextButton(
-                                modifier = Modifier
-                                    .weight(1f),
-                                contentPadding = PaddingValues(15.dp),
-                                shape = defaultShape,
-                                onClick = {
-                                    viewModel.saveSettings()
-                                    viewModel.refreshWidget(
-                                        this@DualClockSettingsActivity,
-                                        widgetId
-                                    )
-                                    setResult(
-                                        RESULT_OK,
-                                        Intent().putExtra(EXTRA_APPWIDGET_ID, widgetId)
-                                    )
-                                    finish()
-                                }
-                            ) {
-                                Text(text = stringResource(R.string.save), fontSize = 18.sp)
-                            }
-                        }
+                        )
                     }
                 ) { innerPadding ->
                     MyContent(modifier = Modifier.padding(innerPadding))
@@ -164,25 +125,19 @@ class DualClockSettingsActivity : ComponentActivity() {
 
         val launcher =
             rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode != RESULT_OK || result.data == null) return@rememberLauncherForActivityResult
-
-                val id = result.data!!.getStringExtra(EXTRA_SELECTED_ZONE_ID)
-                    ?: return@rememberLauncherForActivityResult
-                val selected = CityRepository.getCityById(id)
+                if (result.resultCode != RESULT_OK) return@rememberLauncherForActivityResult
+                val id = result.data?.getStringExtra(EXTRA_SELECTED_ZONE_ID)
                     ?: return@rememberLauncherForActivityResult
 
-                if (viewModel.timezoneBeingEdited == 1) {
-                    viewModel.updateFirstTimeZone(selected)
-                } else {
-                    viewModel.updateSecondTimeZone(selected)
-                }
-
+                viewModel.onCitySelected(id)
                 viewModel.refreshWidget(context, widgetId)
             }
 
-        Column(modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())) {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
             Column(
                 modifier = Modifier
                     .padding(horizontal = 12.dp)
@@ -193,12 +148,12 @@ class DualClockSettingsActivity : ComponentActivity() {
                     title = { PreferenceTitleText(stringResource(R.string.first_city)) },
                     summary = {
                         PreferenceSummaryText(
-                            text = viewModel.getFirstCityName(this@DualClockSettingsActivity),
+                            text = viewModel.getFirstCityName(context),
                             color = MaterialTheme.colorScheme.primary,
                         )
                     },
                     onClick = {
-                        viewModel.setTimezoneBeingEdited(1)
+                        viewModel.setEditingClockIndex(FIRST_CLOCK)
                         launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
                     }
                 )
@@ -207,13 +162,13 @@ class DualClockSettingsActivity : ComponentActivity() {
                     title = { PreferenceTitleText(stringResource(R.string.second_city)) },
                     summary = {
                         PreferenceSummaryText(
-                            text = viewModel.getSecondCityName(this@DualClockSettingsActivity),
+                            text = viewModel.getSecondCityName(context),
                             style = MaterialTheme.typography.preferenceSummaryStyle,
                             color = MaterialTheme.colorScheme.primary,
                         )
                     },
                     onClick = {
-                        viewModel.setTimezoneBeingEdited(2)
+                        viewModel.setEditingClockIndex(SECOND_CLOCK)
                         launcher.launch(Intent(context, TimeZonePickerActivity::class.java))
                     }
                 )
@@ -236,16 +191,76 @@ class DualClockSettingsActivity : ComponentActivity() {
                 SwitchSetting(
                     title = stringResource(R.string.day_night_switch_title),
                     summary = stringResource(R.string.day_night_switch_description),
-                    checked = viewModel.isDayNightModeEnabled,
+                    checked = viewModel.settings.isDayNightModeEnabled,
                     onClick = { viewModel.toggleDayNight() },
                 )
                 HorizontalDivider(Modifier.padding(horizontal = 20.dp))
                 SliderSetting(
                     title = stringResource(R.string.background_opacity_title),
-                    value = viewModel.opacityValue,
+                    value = viewModel.settings.backgroundOpacity,
                     onValueChange = { viewModel.updateOpacity(it) },
                 )
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TopBar(
+    onNavigationIconClick: () -> Unit,
+) {
+    TopAppBar(
+        title = {
+            Text(
+                text = stringResource(R.string.clock_settings),
+                color = MaterialTheme.colorScheme.primary
+            )
+        },
+        navigationIcon = {
+            IconButton(onClick = onNavigationIconClick) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_chevron_left),
+                    contentDescription = stringResource(R.string.navigate_up),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+        },
+        modifier = Modifier.padding(top = dimensionResource(R.dimen.toolbar_top_margin)),
+        windowInsets = WindowInsets.safeDrawing,
+    )
+}
+
+@Composable
+private fun BottomBar(
+    onCancel: () -> Unit,
+    onSave: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+            .padding(bottom = 5.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        TextButton(
+            modifier = Modifier
+                .weight(1f),
+            contentPadding = PaddingValues(15.dp),
+            shape = defaultShape,
+            onClick = onCancel
+        ) {
+            Text(text = stringResource(R.string.cancel), fontSize = 18.sp)
+        }
+
+        TextButton(
+            modifier = Modifier
+                .weight(1f),
+            contentPadding = PaddingValues(15.dp),
+            shape = defaultShape,
+            onClick = onSave
+        ) {
+            Text(text = stringResource(R.string.save), fontSize = 18.sp)
         }
     }
 }
