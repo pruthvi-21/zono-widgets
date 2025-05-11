@@ -6,6 +6,7 @@ import com.jw.zonowidgets.R
 import com.jw.zonowidgets.data.model.CityTimeZoneInfo
 import com.jw.zonowidgets.utils.getCityName
 import com.jw.zonowidgets.utils.getCountryName
+import com.jw.zonowidgets.utils.preferredCityMap
 
 object CityRepository {
 
@@ -448,7 +449,10 @@ object CityRepository {
     val defaultCity: CityTimeZoneInfo
         get() {
             val currentTimeZoneId = TimeZone.getDefault().id
-            return cities.find { it.timeZoneId == currentTimeZoneId }
-                ?: getCityById("new-york-usa")!!
+            val id = preferredCityMap[currentTimeZoneId]
+
+            return cities.find { it.id == id }
+                ?: cities.find { it.timeZoneId == currentTimeZoneId }
+                ?: getCityById("us__new_york")!!
         }
 }
