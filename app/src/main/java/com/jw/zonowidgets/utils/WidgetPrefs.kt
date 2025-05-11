@@ -26,4 +26,13 @@ class WidgetPrefs(context: Context) {
     fun setBackgroundOpacity(widgetId: Int, value: Float) {
         prefs.edit { putFloat("background_opacity_$widgetId", value) }
     }
+
+    fun cleanup(widgetId: Int) {
+        prefs.edit {
+            remove("item1_$widgetId")
+            remove("item2_$widgetId")
+            remove("day_night_switch_$widgetId")
+            remove("background_opacity_$widgetId")
+        }
+    }
 }

@@ -24,18 +24,21 @@ import java.util.Locale
 class DualClockAppWidget : AppWidgetProvider() {
 
     override fun onEnabled(context: Context) {
-        super.onEnabled(context)
         WidgetUpdateScheduler.scheduleNext(context)
     }
 
     override fun onDisabled(context: Context) {
-        super.onDisabled(context)
         WidgetUpdateScheduler.cancel(context)
     }
 
     override fun onUpdate(context: Context, manager: AppWidgetManager, widgetIds: IntArray) {
-        super.onUpdate(context, manager, widgetIds)
         widgetIds.forEach { refreshWidget(context, it) }
+    }
+
+    override fun onDeleted(context: Context, appWidgetIds: IntArray) {
+        appWidgetIds.forEach {
+            WidgetPrefs(context).cleanup(it)
+        }
     }
 
     override fun onAppWidgetOptionsChanged(
