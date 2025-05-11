@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="toolbar_top_margin">12dp</dimen>
-    <dimen name="background_radius">1000dp</dimen>
     <dimen name="widget_radius">22dp</dimen>
+
+    <dimen name="widget_place_font_size">14sp</dimen>
+    <dimen name="widget_date_font_size">14sp</dimen>
+    <dimen name="widget_time_font_size">32sp</dimen>
+    <dimen name="widget_ampm_font_size">16sp</dimen>
+    <dimen name="widget_flag_font_size">24sp</dimen>
+    <dimen name="widget_time_font_size_min">28sp</dimen>
+    <dimen name="widget_ampm_font_size_min">13sp</dimen>
+    <dimen name="widget_flag_font_size_min">18sp</dimen>
+    <dimen name="day_night_icon_size">24dp</dimen>
+    <dimen name="widget_time_font_size_compact">26sp</dimen>
+    <dimen name="widget_ampm_font_size_compact">14sp</dimen>
+    <dimen name="widget_place_font_size_compact">13sp</dimen>
+    <dimen name="widget_date_font_size_compact">12sp</dimen>
+    <dimen name="day_night_icon_size_compact">20dp</dimen>
+
+    <!--    <dimen name="widget_radius">48px</dimen>-->
+    <!--    <dimen name="widget_content_container_padding">48px</dimen>-->
+    <!--    <dimen name="widget_place_font_size">36px</dimen>-->
+    <!--    <dimen name="widget_date_font_size">36px</dimen>-->
+    <!--    <dimen name="widget_time_font_size">84px</dimen>-->
+    <!--    <dimen name="widget_ampm_font_size">42px</dimen>-->
+    <!--    <dimen name="widget_flag_font_size">63px</dimen>-->
+    <!--    <dimen name="widget_time_font_size_min">73px</dimen>-->
+    <!--    <dimen name="widget_ampm_font_size_min">34px</dimen>-->
+    <!--    <dimen name="widget_flag_font_size_min">47px</dimen>-->
+    <!--    <dimen name="day_night_icon_size">60px</dimen>-->
 </resources>

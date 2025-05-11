@@ -6,7 +6,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.jw.zonowidgets.ui.widget.DualClockAppWidget
+import com.jw.zonowidgets.ui.widget.providers.DualClockAppWidget
 import com.jw.zonowidgets.utils.ACTION_SCHEDULED_WIDGET_UPDATE
 import com.jw.zonowidgets.utils.WidgetUpdateScheduler
 

@@ -3,36 +3,45 @@ package com.jw.zonowidgets.utils
 import android.content.Context
 import androidx.core.content.edit
 
+data class DualWidgetSettings(
+    val isDayNightModeEnabled: Boolean = true,
+    val backgroundOpacity: Float = 1f,
+)
+
 class WidgetPrefs(context: Context) {
     private val prefs = context.getSharedPreferences("widget_prefs", Context.MODE_PRIVATE)
 
-    fun getDayNightSwitch(widgetId: Int): Boolean =
-        prefs.getBoolean("day_night_switch_$widgetId", true)
-
-    fun setDayNightSwitch(widgetId: Int, value: Boolean) {
-        prefs.edit { putBoolean("day_night_switch_$widgetId", value) }
+    fun setCityIds(widgetId: Int, ids: List<String>) {
+        prefs.edit {
+            putString("${widgetId}_timezone_ids", ids.joinToString(","))
+        }
     }
 
-    fun getCityIdAt(widgetId: Int, position: Int): String? =
-        prefs.getString("item${position}_${widgetId}", null)
-
-    fun setCityIdAt(widgetId: Int, position: Int, id: String) {
-        prefs.edit { putString("item${position}_${widgetId}", id) }
+    fun getCityIds(widgetId: Int): List<String> {
+        val raw = prefs.getString("${widgetId}_timezone_ids", null)
+        val ids = raw?.split(",") ?: emptyList()
+        return ids
     }
 
-    fun getBackgroundOpacity(widgetId: Int): Float =
-        prefs.getFloat("background_opacity_$widgetId", 1f)
+    fun getSettings(widgetId: Int): DualWidgetSettings {
+        return DualWidgetSettings(
+            isDayNightModeEnabled = prefs.getBoolean("${widgetId}_day_night_enabled", true),
+            backgroundOpacity = prefs.getFloat("${widgetId}_background_opacity", 1f),
+        )
+    }
 
-    fun setBackgroundOpacity(widgetId: Int, value: Float) {
-        prefs.edit { putFloat("background_opacity_$widgetId", value) }
+    fun setSettings(widgetId: Int, value: DualWidgetSettings) {
+        prefs.edit {
+            putBoolean("${widgetId}_day_night_enabled", value.isDayNightModeEnabled)
+            putFloat("${widgetId}_background_opacity", value.backgroundOpacity)
+        }
     }
 
     fun cleanup(widgetId: Int) {
         prefs.edit {
-            remove("item1_$widgetId")
-            remove("item2_$widgetId")
-            remove("day_night_switch_$widgetId")
-            remove("background_opacity_$widgetId")
+            remove("${widgetId}_timezone_ids")
+            remove("${widgetId}_day_night_enabled")
+            remove("${widgetId}_background_opacity")
         }
     }
 }
