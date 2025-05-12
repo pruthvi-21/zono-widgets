@@ -10,6 +10,7 @@
     <string name="cancel">キャンセル</string>
     <string name="save">保存</string>
     <string name="unable_to_open_settings">設定を開くことができません</string>
+    <string name="error_no_timezone">タイムゾーンを選択してください</string>
     <string name="select_your_city">あなたの街を選択してください</string>
     <string name="search_result">検索結果</string>
     <string name="navigate_up">ナビゲートします</string>
