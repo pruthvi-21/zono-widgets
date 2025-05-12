@@ -73,9 +73,22 @@
 
             <LinearLayout
                 android:id="@+id/time_container"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
+                <TextClock
+                    android:id="@+id/amPmText1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:format12Hour="a"
+                    android:format24Hour=""
+                    android:textColor="@color/widget_text_color"
+                    android:textSize="@dimen/widget_ampm_font_size"
+                    android:visibility="gone"
+                    tools:textColor="@color/widget_text_color_night" />
 
                 <TextClock
                     android:id="@+id/time"
@@ -101,11 +114,10 @@
 
             <TextView
                 android:id="@+id/flag_view"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="2dp"
-                android:layout_weight="1"
                 android:gravity="end"
                 android:textSize="@dimen/widget_flag_font_size"
                 tools:text="🇯🇵" />
