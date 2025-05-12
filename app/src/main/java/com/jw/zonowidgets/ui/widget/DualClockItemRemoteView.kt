@@ -6,7 +6,6 @@ import android.content.res.Configuration
 import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
-import androidx.core.text.layoutDirection
 import com.jw.zonowidgets.R
 import com.jw.zonowidgets.data.model.CityTimeZoneInfo
 import com.jw.zonowidgets.utils.DualWidgetSettings
@@ -27,11 +26,25 @@ class DualClockItemRemoteView(
 
     private val zoneId = ZoneId.of(cityTimeZone.timeZoneId)
 
+    private val placeViewId: Int
+    private val dateViewId: Int
+    private val timeViewId: Int
+    private val ampmViewId: Int
+    private val flagViewId: Int
+    private val iconViewId: Int
+    private val backgroundViewId: Int
+
     init {
+        ampmViewId = getAmPmId()
+        placeViewId = R.id.place
+        dateViewId = R.id.date
+        timeViewId = R.id.time
+        flagViewId = R.id.flag_view
+        iconViewId = R.id.icon
+        backgroundViewId = R.id.background
         setupBaseTimeZoneBindings()
         applyForegroundStyling()
         applyBackgroundStyling()
-        applyLayoutDirection()
     }
 
     // --------------------
@@ -39,43 +52,53 @@ class DualClockItemRemoteView(
     // --------------------
 
     private fun setupBaseTimeZoneBindings() {
-        setTextViewText(R.id.place, cityTimeZone.getCityName(context))
-        setString(R.id.date, "setTimeZone", zoneId.id)
-        setString(R.id.time, "setTimeZone", zoneId.id)
-        setString(R.id.amPmText, "setTimeZone", zoneId.id)
+        setTextViewText(placeViewId, cityTimeZone.getCityName(context))
+        setString(dateViewId, "setTimeZone", zoneId.id)
+        setString(timeViewId, "setTimeZone", zoneId.id)
+        setString(ampmViewId, "setTimeZone", zoneId.id)
     }
 
     private fun applyForegroundStyling() {
         if (settings.isDayNightModeEnabled) {
             val textColor = getDayNightTextColor()
-            setTextColor(R.id.place, textColor)
-            setTextColor(R.id.date, textColor)
-            setTextColor(R.id.time, textColor)
-            setTextColor(R.id.amPmText, textColor)
+            setTextColor(placeViewId, textColor)
+            setTextColor(dateViewId, textColor)
+            setTextColor(timeViewId, textColor)
+            setTextColor(ampmViewId, textColor)
         }
 
-        setImageViewResource(R.id.icon, getDayNightIcon())
-        setTextViewText(R.id.flag_view, getFlagEmoji(cityTimeZone.isoCode))
+        setImageViewResource(iconViewId, getDayNightIcon())
+        setTextViewText(flagViewId, getFlagEmoji(cityTimeZone.isoCode))
 
         adjustTextSizeAndVisibilityBasedOnWidth()
     }
 
-    private fun applyLayoutDirection() {
+    private fun getAmPmId(): Int {
+        // Some languages (e.g., Japanese, Korean, Chinese) place AM/PM before the time.
+        // To handle this, we include both AM/PM positions (start and end) in the layout and
+        // toggle visibility based on the current locale at runtime.
+        //
+        // Originally, we attempted to dynamically set `layoutDirection` on the time container
+        // through code based on locale, but this only took effect after a full widget refresh.
+        // To ensure reliable rendering on every update, we adopted this dual-view approach instead.
         val locale = Locale.getDefault()
-        val isRtl = locale.layoutDirection == View.LAYOUT_DIRECTION_RTL
 
-        val layoutDir = if (locale.language in LANGUAGES_WITH_LEADING_AMPM) {
-            if (isRtl) View.LAYOUT_DIRECTION_LTR else View.LAYOUT_DIRECTION_RTL
-        } else locale.layoutDirection
-
-        setInt(R.id.time_container, "setLayoutDirection", layoutDir)
+        return if (locale.language in LANGUAGES_WITH_LEADING_AMPM) {
+            setViewVisibility(R.id.amPmText1, View.VISIBLE)
+            setViewVisibility(R.id.amPmText, View.GONE)
+            R.id.amPmText1
+        } else {
+            setViewVisibility(R.id.amPmText, View.VISIBLE)
+            setViewVisibility(R.id.amPmText1, View.GONE)
+            R.id.amPmText
+        }
     }
 
     private fun applyBackgroundStyling() {
         if (settings.isDayNightModeEnabled) {
-            setInt(R.id.background, "setBackgroundResource", getDayNightBackground())
+            setInt(backgroundViewId, "setBackgroundResource", getDayNightBackground())
         }
-        setFloat(R.id.background, "setAlpha", settings.backgroundOpacity)
+        setFloat(backgroundViewId, "setAlpha", settings.backgroundOpacity)
     }
 
     // --------------------
@@ -88,11 +111,11 @@ class DualClockItemRemoteView(
         val resources = newContext.resources
 
         if (width in Int.MIN_VALUE..ICON_HIDDEN_THRESHOLD) {
-            setViewVisibility(R.id.flag_view, View.GONE)
-            setViewVisibility(R.id.icon, View.GONE)
+            setViewVisibility(flagViewId, View.GONE)
+            setViewVisibility(iconViewId, View.GONE)
         } else {
-            setViewVisibility(R.id.flag_view, View.VISIBLE)
-            setViewVisibility(R.id.icon, View.VISIBLE)
+            setViewVisibility(flagViewId, View.VISIBLE)
+            setViewVisibility(iconViewId, View.VISIBLE)
         }
 
         if (isCompact) {
@@ -101,16 +124,16 @@ class DualClockItemRemoteView(
             val timeFontSize = resources.getDimension(R.dimen.widget_time_font_size_compact)
             val ampmFontSize = resources.getDimension(R.dimen.widget_ampm_font_size_compact)
 
-            setTextViewTextSize(R.id.place, TypedValue.COMPLEX_UNIT_PX, placeFontSize)
-            setTextViewTextSize(R.id.date, TypedValue.COMPLEX_UNIT_PX, dateFontSize)
-            setTextViewTextSize(R.id.time, TypedValue.COMPLEX_UNIT_PX, timeFontSize)
-            setTextViewTextSize(R.id.amPmText, TypedValue.COMPLEX_UNIT_PX, ampmFontSize)
+            setTextViewTextSize(placeViewId, TypedValue.COMPLEX_UNIT_PX, placeFontSize)
+            setTextViewTextSize(dateViewId, TypedValue.COMPLEX_UNIT_PX, dateFontSize)
+            setTextViewTextSize(timeViewId, TypedValue.COMPLEX_UNIT_PX, timeFontSize)
+            setTextViewTextSize(ampmViewId, TypedValue.COMPLEX_UNIT_PX, ampmFontSize)
         } else {
             val placeFontSize = resources.getDimension(R.dimen.widget_place_font_size)
             val dateFontSize = resources.getDimension(R.dimen.widget_date_font_size)
 
-            setTextViewTextSize(R.id.place, TypedValue.COMPLEX_UNIT_PX, placeFontSize)
-            setTextViewTextSize(R.id.date, TypedValue.COMPLEX_UNIT_PX, dateFontSize)
+            setTextViewTextSize(placeViewId, TypedValue.COMPLEX_UNIT_PX, placeFontSize)
+            setTextViewTextSize(dateViewId, TypedValue.COMPLEX_UNIT_PX, dateFontSize)
 
             when (width) {
                 in Int.MIN_VALUE..SMALL_WIDTH_THRESHOLD -> {
@@ -118,9 +141,9 @@ class DualClockItemRemoteView(
                     val ampmFontSizeMin = resources.getDimension(R.dimen.widget_ampm_font_size_min)
                     val flagFontSizeMin = resources.getDimension(R.dimen.widget_flag_font_size_min)
 
-                    setTextViewTextSize(R.id.time, TypedValue.COMPLEX_UNIT_PX, timeFontSizeMin)
-                    setTextViewTextSize(R.id.amPmText, TypedValue.COMPLEX_UNIT_PX, ampmFontSizeMin)
-                    setTextViewTextSize(R.id.flag_view, TypedValue.COMPLEX_UNIT_PX, flagFontSizeMin)
+                    setTextViewTextSize(timeViewId, TypedValue.COMPLEX_UNIT_PX, timeFontSizeMin)
+                    setTextViewTextSize(ampmViewId, TypedValue.COMPLEX_UNIT_PX, ampmFontSizeMin)
+                    setTextViewTextSize(flagViewId, TypedValue.COMPLEX_UNIT_PX, flagFontSizeMin)
                 }
 
                 else -> {
@@ -128,9 +151,9 @@ class DualClockItemRemoteView(
                     val ampmFontSize = resources.getDimension(R.dimen.widget_ampm_font_size)
                     val flagFontSize = resources.getDimension(R.dimen.widget_flag_font_size)
 
-                    setTextViewTextSize(R.id.time, TypedValue.COMPLEX_UNIT_PX, timeFontSize)
-                    setTextViewTextSize(R.id.amPmText, TypedValue.COMPLEX_UNIT_PX, ampmFontSize)
-                    setTextViewTextSize(R.id.flag_view, TypedValue.COMPLEX_UNIT_PX, flagFontSize)
+                    setTextViewTextSize(timeViewId, TypedValue.COMPLEX_UNIT_PX, timeFontSize)
+                    setTextViewTextSize(ampmViewId, TypedValue.COMPLEX_UNIT_PX, ampmFontSize)
+                    setTextViewTextSize(flagViewId, TypedValue.COMPLEX_UNIT_PX, flagFontSize)
                 }
             }
         }
