@@ -27,19 +27,26 @@ class DualClockRemoteView(
         val layoutId = getLayoutId(context, widgetId)
 
         ids.forEach {
-            val city = CityRepository.getCityById(it) ?: CityRepository.defaultCity
+            val city = CityRepository.getCityById(it)
 
-            addView(
-                R.id.root,
-                DualClockItemRemoteView(
-                    context = context,
-                    widgetId = widgetId,
-                    layoutId = layoutId,
-                    isCompact = isCompactLayout(context, widgetId),
-                    cityTimeZone = city,
-                    settings = settings
+            if (city != null) {
+                addView(
+                    R.id.root,
+                    DualClockItemRemoteView(
+                        context = context,
+                        widgetId = widgetId,
+                        layoutId = layoutId,
+                        isCompact = isCompactLayout(context, widgetId),
+                        cityTimeZone = city,
+                        settings = settings
+                    )
                 )
-            )
+            } else {
+                val errorMessage = context.getString(R.string.error_no_timezone)
+                val errorView = RemoteViews(context.packageName, R.layout.widget_dual_clock_error)
+                errorView.setTextViewText(R.id.error_message, errorMessage)
+                addView(R.id.root, errorView)
+            }
         }
     }
 
