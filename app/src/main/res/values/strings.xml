@@ -9,6 +9,9 @@
     <string name="day_night_switch_description">Background color will change depending on the time of the day.</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="allow">Allow</string>
+    <string name="enable_precise_alarms">Enable Precise Alarms</string>
+    <string name="enable_precise_alarms_description">This app can use precise alarms to keep your clocks visually up to date. Granting this optional permission helps improve appearance accuracy.</string>
     <string name="unable_to_open_settings">Unable to open settings</string>
     <string name="error_no_timezone">Please select a timezone</string>
     <string name="select_your_city">Select your city</string>

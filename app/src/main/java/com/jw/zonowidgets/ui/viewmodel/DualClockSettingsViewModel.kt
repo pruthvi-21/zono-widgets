@@ -12,6 +12,7 @@ import com.jw.zonowidgets.data.model.CityTimeZoneInfo
 import com.jw.zonowidgets.ui.widget.providers.DualClockAppWidget
 import com.jw.zonowidgets.utils.DualWidgetSettings
 import com.jw.zonowidgets.utils.WidgetPrefs
+import com.jw.zonowidgets.utils.WidgetUpdateScheduler
 import com.jw.zonowidgets.utils.getCityName
 import com.jw.zonowidgets.utils.getCountryName
 
@@ -96,6 +97,7 @@ class DualClockSettingsViewModel(
         if (providerClassName == DualClockAppWidget::class.java.name) {
             DualClockAppWidget.refreshWidget(context, widgetId)
         }
+        WidgetUpdateScheduler.scheduleNext(context)
     }
 
     companion object {
