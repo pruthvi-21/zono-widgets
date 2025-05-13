@@ -11,6 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import com.jw.zonowidgets.data.model.CityTimeZoneInfo
 import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 fun CityTimeZoneInfo.readableOffset(): String {
@@ -66,4 +67,21 @@ fun getFlagEmoji(countryCode: String): String {
     val secondLetter = Character.codePointAt(countryCode, 1) - 0x41 + 0x1F1E6
 
     return String(Character.toChars(firstLetter)) + String(Character.toChars(secondLetter))
+}
+
+fun getNextTriggerInUtc(timeZones: List<ZoneId>): Long? {
+    val nowUtc = ZonedDateTime.now(ZoneOffset.UTC)
+
+    return timeZones.minOfOrNull { zoneId ->
+        val nowInZone = nowUtc.withZoneSameInstant(zoneId)
+
+        val nextMorning = nowInZone.withHour(DAY_START).withMinute(0).withSecond(0).withNano(0)
+            .let { if (it.isAfter(nowInZone)) it else it.plusDays(1) }
+
+        val nextNight = nowInZone.withHour(NIGHT_START).withMinute(0).withSecond(0).withNano(0)
+            .let { if (it.isAfter(nowInZone)) it else it.plusDays(1) }
+
+        val nextTrigger = if (nextMorning.isBefore(nextNight)) nextMorning else nextNight
+        nextTrigger.withZoneSameInstant(ZoneOffset.UTC).toInstant().toEpochMilli()
+    }
 }

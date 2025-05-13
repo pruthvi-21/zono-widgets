@@ -8,7 +8,9 @@ import android.view.View
 import android.widget.RemoteViews
 import com.jw.zonowidgets.R
 import com.jw.zonowidgets.data.model.CityTimeZoneInfo
+import com.jw.zonowidgets.utils.DAY_START
 import com.jw.zonowidgets.utils.DualWidgetSettings
+import com.jw.zonowidgets.utils.NIGHT_START
 import com.jw.zonowidgets.utils.getCityName
 import com.jw.zonowidgets.utils.getFlagEmoji
 import java.time.ZoneId
@@ -176,7 +178,7 @@ class DualClockItemRemoteView(
     private val isDayTime: Boolean
         get() {
             val hour = ZonedDateTime.now(zoneId).hour
-            return hour in 6..17
+            return hour in DAY_START..<NIGHT_START
         }
 
     private val width: Int

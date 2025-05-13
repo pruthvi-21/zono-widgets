@@ -44,4 +44,12 @@ class WidgetPrefs(context: Context) {
             remove("${widgetId}_background_opacity")
         }
     }
+
+    fun shouldShowExactAlarmDialog(): Boolean {
+        return prefs.getBoolean("show_exact_alarm_dialog", true)
+    }
+
+    fun setShowExactAlarmDialog(show: Boolean) {
+        prefs.edit { putBoolean("show_exact_alarm_dialog", show) }
+    }
 }

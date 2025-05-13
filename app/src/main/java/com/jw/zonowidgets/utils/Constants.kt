@@ -4,6 +4,9 @@ const val EXTRA_SELECTED_ZONE_ID = "extra_selected_zone_id"
 
 const val ACTION_SCHEDULED_WIDGET_UPDATE = "com.jw.zonowidgets.action.SCHEDULED_WIDGET_UPDATE"
 
+const val DAY_START = 6 // 6 am
+const val NIGHT_START = 18 // 6pm
+
 // @formatter:off
 val preferredCityMap = mapOf(
     "Africa/Abidjan"                    to "ci__abidjan",

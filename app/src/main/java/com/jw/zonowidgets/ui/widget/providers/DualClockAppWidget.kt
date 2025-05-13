@@ -2,18 +2,16 @@ package com.jw.zonowidgets.ui.widget.providers
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
 import android.os.Bundle
+import com.jw.zonowidgets.data.CityRepository
 import com.jw.zonowidgets.ui.widget.DualClockRemoteView
 import com.jw.zonowidgets.utils.WidgetPrefs
 import com.jw.zonowidgets.utils.WidgetUpdateScheduler
+import java.time.ZoneId
 
 class DualClockAppWidget : AppWidgetProvider() {
-
-    // Called when the first widget is added to the home screen
-    override fun onEnabled(context: Context) {
-        WidgetUpdateScheduler.scheduleNext(context)
-    }
 
     // Called when the last widget is removed
     override fun onDisabled(context: Context) {
@@ -32,6 +30,7 @@ class DualClockAppWidget : AppWidgetProvider() {
         appWidgetIds.forEach { widgetId ->
             WidgetPrefs(context).cleanup(widgetId)
         }
+        WidgetUpdateScheduler.scheduleNext(context)
     }
 
     // Called when the widget is resized or its options are changed
@@ -45,6 +44,8 @@ class DualClockAppWidget : AppWidgetProvider() {
     }
 
     companion object {
+        private const val TAG = "DualClockAppWidget"
+
         /**
          * Updates the UI of a specific widget instance.
          */
@@ -52,6 +53,28 @@ class DualClockAppWidget : AppWidgetProvider() {
             AppWidgetManager
                 .getInstance(context)
                 .updateAppWidget(widgetId, DualClockRemoteView(context, widgetId))
+        }
+
+        fun getWidgetIds(context: Context): IntArray {
+            val appWidgetManager = AppWidgetManager.getInstance(context)
+            return appWidgetManager.getAppWidgetIds(
+                ComponentName(context, DualClockAppWidget::class.java)
+            ) ?: intArrayOf()
+        }
+
+        fun getAllWidgetTimeZones(context: Context): Set<ZoneId> {
+            val prefs = WidgetPrefs(context)
+            val widgetIds = getWidgetIds(context)
+
+            val allZoneIds = widgetIds.flatMap { widgetId ->
+                prefs.getCityIds(widgetId).mapNotNull { cityId ->
+                    CityRepository.getCityById(cityId)?.timeZoneId?.let { zoneId ->
+                        runCatching { ZoneId.of(zoneId) }.getOrNull()
+                    }
+                }
+            }.toSet()
+
+            return allZoneIds
         }
     }
 }
