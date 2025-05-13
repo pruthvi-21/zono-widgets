@@ -81,7 +81,6 @@ fun DualClockSettingsScreen(
                     ?: return@rememberLauncherForActivityResult
 
                 viewModel.onCitySelected(id)
-                viewModel.refreshWidget(context, widgetId)
             }
 
         Column(
