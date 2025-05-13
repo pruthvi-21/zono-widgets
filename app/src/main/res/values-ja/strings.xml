@@ -9,6 +9,9 @@
     <string name="day_night_switch_description">背景の色は、時刻に応じて変化します。</string>
     <string name="cancel">キャンセル</string>
     <string name="save">保存</string>
+    <string name="allow">許可</string>
+    <string name="enable_precise_alarms">正確なアラームを有効にする</string>
+    <string name="enable_precise_alarms_description">このアプリは、時計を視覚的に最新の状態に保つために正確なアラームを使用できます。このオプションの権限を許可すると、表示の正確性が向上します。</string>
     <string name="unable_to_open_settings">設定を開くことができません</string>
     <string name="error_no_timezone">タイムゾーンを選択してください</string>
     <string name="select_your_city">あなたの街を選択してください</string>
